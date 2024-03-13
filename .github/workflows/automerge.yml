@@ -1,0 +1,27 @@
+name: Automerge
+
+on:
+  pull_request:
+    types: [reviewed, labeled, unlabeled, synchronized]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.review.state == 'approved' &&
+      !contains(github.event.pull_request.labels.*.name, 'noAutoMerge')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Automerge
+        uses: pascalgn/automerge-action@v0.14.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: merge
+          MERGE_COMMIT_MESSAGE: pull-request-title
+          MERGE_FORKS: false
+          MERGE_RETRIES: 6
+          MERGE_RETRY_SLEEP: 10000
+
