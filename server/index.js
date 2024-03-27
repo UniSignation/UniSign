@@ -33,7 +33,7 @@ app.get('/db/users', async (req, res) => {
   res.json(records);
 });
 
-app.post('/db/users', async (req, res) => {
+app.post('/sign-up', async (req, res) => {
   try {
     const newRecord = await Users.create({
       firstName: req.body.firstName,
@@ -48,7 +48,7 @@ app.post('/db/users', async (req, res) => {
   }
 });
 
-app.post('/db/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const user = await Users.findOne({ where: { email: req.body.email } });
   if (!user) {
     return res.status(401).json({ error: 'User not found' });
