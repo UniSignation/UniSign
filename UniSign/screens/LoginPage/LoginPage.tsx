@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import CustomInput from '../components/CustomInput';
-import { Button, ClickableText } from '../components/Button';
+import CustomInput from '../../components/CustomInput';
+import { Button, ClickableText } from '../../components/Button';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -11,9 +11,19 @@ const LoginScreen = () => {
 
     const onLoginPressed = () => {
         console.warn("Sign in")
+
+        navigation.navigate("Home" as never);
+
+    }
+    const onRegisterPressed = () => {
+        console.warn("Sign up")
+        
+        navigation.navigate("Register" as never);
     }
     const onClickForgotPressed = () => {
         console.warn("forgot password")
+
+        navigation.navigate("Forgot password" as never);
     }
 
     return (
@@ -22,7 +32,6 @@ const LoginScreen = () => {
                 placeholder="Email"
                 value={email}
                 setValue={setEmail}
-                secureTextEntry={false}
             />
             <CustomInput
                 placeholder="Password"
@@ -40,7 +49,7 @@ const LoginScreen = () => {
                 text='LOGIN'
             />
             <ClickableText
-                onPress={() => navigation.navigate('Register' as never)}
+                onPress={onRegisterPressed}
                 text='Register'
                 type='Register'
             />

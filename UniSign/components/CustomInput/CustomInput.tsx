@@ -5,7 +5,7 @@ type CustomInputProps = {
   value: string,
   setValue: (text: string) => void, 
   placeholder: string,
-  secureTextEntry: boolean
+  secureTextEntry?: boolean
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({ value, setValue, placeholder, secureTextEntry }) => {
