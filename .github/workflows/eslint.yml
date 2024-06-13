@@ -17,11 +17,8 @@ jobs:
         with:
           node-version: '15'
 
-      - name: Change working directory
-        run: cd UniSign
-
       - name: Install dependencies
-        run: ls && npm install
+        run: cd UniSign && npm install
 
       - name: Run ESLint
         run: npx eslint .
