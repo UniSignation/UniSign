@@ -16,11 +16,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: ls directory
-        run: ls
-        
+
       - name: Change working directory
-        run: cd UniSign/UniSign
+        run: cd UniSign
 
       - name: Install dependencies
         run: npm install
