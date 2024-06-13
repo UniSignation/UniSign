@@ -15,13 +15,13 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '15'
 
       - name: Change working directory
         run: cd UniSign
 
       - name: Install dependencies
-        run: npm install
+        run: ls && npm install
 
       - name: Run ESLint
         run: npx eslint .
