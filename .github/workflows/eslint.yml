@@ -3,26 +3,20 @@ name: ESLint
 on:
   pull_request:
     branches:
-      - main  # Change this to your main branch name if it's different
+      - main
 
 jobs:
   eslint:
-    # if: false  # This condition will always evaluate to false, effectively disabling the workflow
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
-
-      - name: Install ESLint
-        run: npm install eslint@8.57.0
-
+          node-version: '18.x'
       - name: Install dependencies
-        run: cd UniSign && ls -a && cat package.json && npm install
-
+        run: npm install
+        working-directory: UniSign
       - name: Run ESLint
         run: npx eslint .
+        working-directory: UniSign
