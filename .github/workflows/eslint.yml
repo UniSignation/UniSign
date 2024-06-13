@@ -10,16 +10,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          
       - name: Install dependencies
         run: npm install
         working-directory: UniSign
-        
       - name: Run ESLint
-        run: npx eslint .
+        run: |
+          eslint_output=$(npx eslint .)
+          echo "$eslint_output"
+          echo "::set-output name=eslint_output::$eslint_output"
+        id: eslint
         working-directory: UniSign
+      - name: Comment ESLint output
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = process.env.ESLINT_OUTPUT;
+            const lines = output.split('\n').filter(line => line.trim() !== '');
+            const comment = lines.join('\n');
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## ESLint Output\n```\n' + comment + '\n```',
+            });
