@@ -2,7 +2,7 @@ module.exports = {
   extends: ['expo', 'prettier'],
   plugins: ['prettier', 'import'],
   rules: {
-    'prettier/prettier': 'warn',
+    'prettier/prettier': 'error',
     'import/no-unresolved': [
       'error',
       {
