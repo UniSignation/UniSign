@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Change working directory
+        run: cd UniSign/UniSign
+
       - name: Install dependencies
         run: npm install
 
