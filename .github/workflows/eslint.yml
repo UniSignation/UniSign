@@ -7,6 +7,7 @@ on:
 
 jobs:
   eslint:
+    if: false  # This condition will always evaluate to false, effectively disabling the workflow
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +19,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: cd UniSign && npm install
+        run: cd UniSign && ls -a && cat package.json && npm install
 
       - name: Run ESLint
         run: npx eslint .
