@@ -17,5 +17,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       }
     }
-  }
+  },
+  ignorePatterns: ['expo-env.d.ts']
 };
