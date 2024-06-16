@@ -22,6 +22,7 @@ container:{
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f0c99c",
+    marginVertical: 10
 },
 });
 

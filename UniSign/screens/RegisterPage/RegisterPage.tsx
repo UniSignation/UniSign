@@ -36,7 +36,7 @@ const RegisterPage = () => {
     }
     return (
         <View style={styles.container}>
-            <Title text='Create an account' />
+            <Title text='Create an account' type='' />
             <CustomInput
                 placeholder="First Name"
                 value={firstname}
@@ -65,7 +65,7 @@ const RegisterPage = () => {
                 secureTextEntry={true}
             />
             <View style={styles.addPictureView}>
-                <ClickableImage onPress={onImagePressed} url={require('@/assets/images/addphoto.png')} />
+                <ClickableImage onPress={onImagePressed} url={require('@/assets/images/addphoto.png')} type='Small'/>
                 <Text style={{ paddingLeft: 10, fontSize: 17, fontWeight: 'bold', color: '#443532' }}>Add a profile picture</Text>
             </View>
 

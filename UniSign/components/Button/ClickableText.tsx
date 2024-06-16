@@ -23,7 +23,9 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#443532'
+        color: '#443532',
+        fontFamily: 'serif',
+
     },
     textForgot: {
         height: 30,
@@ -31,7 +33,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#443532',
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        fontFamily: 'serif',
+
     },
 });
 export default ClickableText

@@ -13,6 +13,9 @@ const ForgotPasswordPage = () => {
 
     const onSendPressed = () => {
         console.warn("send")
+
+        navigation.navigate("Reset password" as never);
+
     }
 
     const onLoginPressed = () => {
@@ -24,7 +27,7 @@ const ForgotPasswordPage = () => {
 
     return (
         <View style={styles.container}>
-            <Title text='Reset your password' />
+            <Title text='Reset your password' type=''/>
             <View style={styles.inputContainer}>
                 <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#443532', marginBottom: 5 }}>Email *</Text>
                 <CustomInput

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'flex-start',
-        marginBottom :20
+        marginBottom: 20
     },
     optionContainer: {
         flexDirection: 'row',
@@ -57,7 +57,9 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         color: '#443532',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'serif',
+
     },
 });
 
