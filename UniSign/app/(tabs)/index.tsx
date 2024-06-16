@@ -1,15 +1,10 @@
-import LoginScreen from '@/screens/LoginPage';
-import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 import UniSignBackground from '@/components/Background';
+import Navigation from '@/components/navigation';
 
 export default function HomeScreen() {
   return (
     <UniSignBackground>
-        <LoginScreen />
+        <Navigation/>
     </UniSignBackground>
   );
 }
-
-const styles = StyleSheet.create({
-
-});

@@ -7,7 +7,7 @@ interface UniSignBackgroundProps {
 
 const UniSignBackground: React.FC<UniSignBackgroundProps> = ({ children }) => {
   return (
-    <ImageBackground style={[styles.image]} source={require('@/assets/images/Backgrond.png') } resizeMode='cover'>
+    <ImageBackground style={[styles.image]} source={require('@/assets/images/Background.png')} resizeMode='cover'>
       {children}
     </ImageBackground>
   );
@@ -16,7 +16,7 @@ const UniSignBackground: React.FC<UniSignBackgroundProps> = ({ children }) => {
 const styles = StyleSheet.create({
   image: {
     width: "100%",
-    height: "100%",
+    height: "100%"
   }
 });
 
