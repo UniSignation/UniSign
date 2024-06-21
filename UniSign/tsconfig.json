@@ -6,7 +6,9 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "noImplicitAny": false,
+    "baseUrl": ".",
   },
   "include": [
     "**/*.ts",

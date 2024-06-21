@@ -1,0 +1,25 @@
+name: ESLint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install ESLint
+        run: npm install eslint@8.57.0 
+        working-directory: UniSign
+        
+      - name: Run ESLint
+        run: npx eslint .
+        working-directory: UniSign

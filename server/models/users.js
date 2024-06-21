@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('./db'); // Assuming your sequelize instance is exported from models/index.js
+const { sequelize } = require('./db');
 const bcrypt = require('bcrypt');
 const saltRounds = 2;
 
