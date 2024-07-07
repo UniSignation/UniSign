@@ -15,7 +15,7 @@ export type RootStackParamList = {
   Register: undefined;
   'Forgot password': undefined;
   Home: { firstName: string };
-  'Reset password': undefined;
+  'Reset password': {email: string};
   'My profile': undefined;
   'Edit profile': undefined;
 };

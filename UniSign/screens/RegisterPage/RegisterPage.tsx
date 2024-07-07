@@ -9,10 +9,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, RegisterInfo } from '@/schema/registerSchema';
 import * as ImagePicker from 'expo-image-picker';
-const BASE_URL = 'http://192.168.1.42:3000'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
 
+const BASE_URL = 'http:/192.168.0.103:3000'
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterPage = () => {

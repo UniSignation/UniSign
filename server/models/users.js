@@ -37,4 +37,10 @@ Users.beforeCreate(async (user, options) => {
   user.password = hashedPassword;
 });
 
+Users.beforeUpdate(async (user, options) => {
+  const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+  user.password = hashedPassword;
+});
+
+
 module.exports = Users;

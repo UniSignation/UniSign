@@ -61,7 +61,6 @@ exports.getUser = async (req, res) => {
 
 
 exports.sendEmail = async (req, res) => {
-  // key
   try {
     const temporaryCode = crypto.randomBytes(3).toString('hex');
     const expiry = new Date(Date.now() + 5 * 60 * 1000);
@@ -87,5 +86,55 @@ exports.sendEmail = async (req, res) => {
   } catch (error) {
     console.error("Caught error:", error);
     return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.codeMatch = async (req, res) => {
+  try {
+    const userCode = await emailVerificationCodes.findOne({ where: { email: req.body.email } });
+    if (!userCode) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    if (req.body.code !== userCode.temporaryCode) {
+      return res.status(401).json({ error: 'Code is not match' });
+    }
+
+    res.json({ message: 'Code is match' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const updateRecord = await Users.update(
+      {
+        password: req.body.password
+      },
+      {
+        where: { email: req.body.email },
+        individualHooks: true,
+      }
+    );
+    if (updateRecord) {
+      return res.status(200).json({ message: 'Password updated successfully' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.deleteCode = async (req, res) => {
+  try {
+    const updateRecord = await emailVerificationCodes.destroy({
+        where: { email: req.body.email },
+      }
+    );
+    if (updateRecord) {
+      return res.status(200).json({ message: 'delete successfully' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
