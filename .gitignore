@@ -65,10 +65,10 @@ yarn-error.log
 
 server/.env
 
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+src/UniSign/.pnp.*
+src/UniSign/.yarn/*
+!src/UniSign/.yarn/patches
+!src/UniSign/.yarn/plugins
+!src/UniSign/.yarn/releases
+!src/UniSign/.yarn/sdks
+!src/UniSign/.yarn/versions
