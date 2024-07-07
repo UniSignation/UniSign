@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useState } from 'react'
-import Title from '@/components/Text'
+import {Title} from '@/components/Text'
 import { ClickableImage, ClickableText, Button } from '@/components/Button'
 import CustomInput from '@/components/CustomInput'
 import { useNavigation } from '@react-navigation/native';

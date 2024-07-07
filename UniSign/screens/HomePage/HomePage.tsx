@@ -1,13 +1,19 @@
 import { View, StyleSheet, Text } from 'react-native'
 import React from 'react'
 import { ClickableText, ClickableImage, Button } from '../../components/Button'
-import Title from '@/components/Text'
-import { useNavigation } from '@react-navigation/native';
+import {Title} from '@/components/Text'
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../components/navigation';
 
+type HomePageRouteProp = RouteProp<RootStackParamList, 'Home'>;
 
-const HomePage = () => {
+type Props = {
+  route: HomePageRouteProp;
+};
 
+const HomePage = ({route}:Props) => {
   const navigation = useNavigation();
+  const { firstName } = route.params;
 
   const onImagePressed = () => {
     console.warn("Image press")
@@ -33,12 +39,13 @@ const HomePage = () => {
     navigation.navigate("Login" as never);
 
   }
+  
   return (
     <View style={styles.mainView}>
       <View style={{ flex: 1}}></View>
       <View style={styles.topPage}>
         <View style={styles.title}>
-          <Title text='Hi User !' type='' />
+          <Title text= {`Hi ${firstName}!`} type='' />
         </View>
         <View style={styles.addPictureView}>
           <ClickableImage onPress={onImagePressed} url={require('@/assets/images/profile.png')} type='Circle' />
