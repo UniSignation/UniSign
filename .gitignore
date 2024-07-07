@@ -37,6 +37,7 @@ local.properties
 # node.js
 #
 node_modules/
+src/UniSign/node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -64,4 +65,10 @@ yarn-error.log
 
 server/.env
 
-# testing
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
