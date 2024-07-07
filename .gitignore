@@ -37,6 +37,7 @@ local.properties
 # node.js
 #
 node_modules/
+src/UniSign/node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -64,4 +65,12 @@ yarn-error.log
 
 server/.env
 
-# testing
+src/UniSign/.pnp.*
+src/UniSign/.yarn/*
+!src/UniSign/.yarn/patches
+!src/UniSign/.yarn/plugins
+!src/UniSign/.yarn/releases
+!src/UniSign/.yarn/sdks
+!src/UniSign/.yarn/versions
+
+src/UniSign/flask-service/venv/lib/*
