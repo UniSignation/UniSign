@@ -3,14 +3,13 @@ const app = express();
 const PORT = 3000;
 
 const { sequelize } = require('./models/db');
-const Users = require('./models/users');
-const bcrypt = require('bcrypt');
+const userRouters = require('./routes/userRoute');
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+  res.send('Hello World!');
+});
 
 // Mock Video Call Service
 app.post('/api/video-call', (req, res) => {
@@ -27,42 +26,8 @@ app.post('/api/video-transcription', (req, res) => {
   res.json({ transcription: "This is a mock video transcription" });
 });
 
-
-app.get('/db/users', async (req, res) => {
-  const records = await Users.findAll();
-  res.json(records);
-});
-
-app.post('/sign-up', async (req, res) => {
-  try {
-    const newRecord = await Users.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      usesService: req.body.usesService,
-      password: req.body.password
-    });
-    res.status(201).json(newRecord);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-app.post('/login', async (req, res) => {
-  const user = await Users.findOne({ where: { email: req.body.email } });
-  if (!user) {
-    return res.status(401).json({ error: 'User not found' });
-  }
-
-  const isMatch = await bcrypt.compare(req.body.password, user.password);
-  if (!isMatch) {
-    return res.status(401).json({ error: 'Invalid password' });
-  }
-
-  // Password is correct, proceed with login
-  res.json({ message: 'Login successful' });
-});
-
+// Use user routers
+app.use('/user', userRouters);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
@@ -72,5 +37,4 @@ app.listen(PORT, () => {
   }).catch((error) => {
     console.error('Error synchronizing database:', error);
   });
-
 });

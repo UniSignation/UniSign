@@ -37,7 +37,6 @@ local.properties
 # node.js
 #
 node_modules/
-src/UniSign/node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -63,14 +62,11 @@ yarn-error.log
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
 
-server/.env
-
-src/UniSign/.pnp.*
-src/UniSign/.yarn/*
-!src/UniSign/.yarn/patches
-!src/UniSign/.yarn/plugins
-!src/UniSign/.yarn/releases
-!src/UniSign/.yarn/sdks
-!src/UniSign/.yarn/versions
-
-src/UniSign/flask-service/venv/lib/*
+# yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
