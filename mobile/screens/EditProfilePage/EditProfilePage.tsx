@@ -113,7 +113,7 @@ const EditProfilePage = ({ route }: Props) => {
             </View>
             <View style={{ flex: 8, width: "100%", height: "100%" }}>
                 <View style={styles.addPictureView}>
-                    <ClickableImage onPress={onImagePressed} url={require('@/assets/images/profile.png')} type='Big' />
+                    <ClickableImage onPress={onImagePressed} url={require('../../assets/images/profile.png')} type='Big' />
                 </View>
                 <View style={styles.texts}>
                     <CustomInput
