@@ -9,11 +9,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ResetPassSchema, ResetPassInfo } from '../../schema/ResetPassSchema';
 import { Message } from '@/components/Text';
 import axios from 'axios';
-const BASE_URL = 'http:/192.168.0.103:3000'
+const BASE_URL = 'http:/192.168.1.39:3000'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
 
 type ResetPassPageRouteProp = RouteProp<RootStackParamList, 'Reset password'>;
+type ResetPassNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Reset password'>;
+
 
 type Props = {
   route: ResetPassPageRouteProp;
@@ -21,7 +23,7 @@ type Props = {
 
   const ResetPasswordPage = ({route}:Props) => {
     const [message, setMessage] = useState("");
-    const navigation = useNavigation();
+    const navigation = useNavigation<ResetPassNavigationProp>();
 
       const [timeRemaining, setTimeRemaining] = useState(300); // 300 seconds = 5 minutes
       const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -48,7 +50,7 @@ type Props = {
       }, [timeRemaining]);
     
 
-    const { control, handleSubmit } = useForm<ResetPassInfo>({
+    const { control, handleSubmit, reset } = useForm<ResetPassInfo>({
         resolver: zodResolver(ResetPassSchema),
     });
 
@@ -58,7 +60,7 @@ type Props = {
             const response = await axios.post(`${BASE_URL}/user/codeMatch`, { email, code });
             await axios.post(`${BASE_URL}/user/updatePassword`, { email, password });
             setMessage(response.data.message);
-            navigation.navigate("Login" as never);
+            navigation.navigate("Login");
             await axios.post(`${BASE_URL}/user/deleteCode`, { email });
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -74,7 +76,7 @@ type Props = {
         try {
             const response = await axios.post(`${BASE_URL}/user/deleteCode`, { email });
             setMessage(response.data.message);
-            navigation.navigate("Login" as never);
+            navigation.navigate("Login");
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');
@@ -86,11 +88,13 @@ type Props = {
 
     }
     const onSendAgainPressed = async () => {
+
         try {
             await axios.post(`${BASE_URL}/user/deleteCode`, { email });
             const response = await axios.post(`${BASE_URL}/user/sendEmail`, { email });
             setMessage(response.data.message);
-            navigation.navigate("Reset Password" as never);
+            navigation.navigate('Reset password',{email});
+            reset();
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');

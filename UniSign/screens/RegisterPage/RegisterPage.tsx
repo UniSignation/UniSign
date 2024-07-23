@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native'
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomInput from '../../components/CustomInput';
 import { Button, ClickableText, ClickableImage, RadioButton } from '../../components/Button';
@@ -8,11 +8,11 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, RegisterInfo } from '@/schema/registerSchema';
-import * as ImagePicker from 'expo-image-picker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
+import { launchImageLibrary } from 'react-native-image-picker';
 
-const BASE_URL = 'http:/192.168.0.103:3000'
+const BASE_URL = 'http://192.168.1.39:3000';
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterPage = () => {
@@ -31,35 +31,35 @@ const RegisterPage = () => {
         { label: 'Spoken Language', value: 'False' },
     ];
 
-    const onImagePressed = async () => {
-        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-        if (permissionResult.granted === false) {
-            alert("Permission to access gallery is required!");
-            return;
-        }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+    const onImagePressed = () => {
+        const options = {
+            mediaType: 'photo' as const,
+            includeBase64: false,
+        };
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.errorCode) {
+                console.log('ImagePicker Error: ', response.errorMessage);
+            } else if (response.assets && response.assets.length > 0) {
+                const source = response.assets[0].uri;
+                if (source) {
+                    setImage(source);
+                } else {
+                    console.log('Image URI is undefined');
+                }
+            }
         });
-
-        if (!result.canceled && result.assets && result.assets.length > 0) {
-            setImage(result.assets[0].uri);
-        }
     };
-
 
     const onRegisterPressed = async (data: RegisterInfo) => {
         const { firstName, lastName, email, password } = data;
         try {
-            const response = await axios.post(`${BASE_URL}/user/sign-up`, { firstName, lastName, email, password, usesService });
+            const response = await axios.post(`${BASE_URL}/user/sign-up`, { firstName, lastName, email, password, usesService, profileImage: image });
             setMessage(response.data.message);
-            navigation.navigate("Home", { firstName });
+            navigation.navigate("Home", { firstName, email });
         } catch (error) {
-            console.error(error)
+            console.error(error);
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');
             } else {
@@ -68,10 +68,10 @@ const RegisterPage = () => {
         }
     };
 
-
     const onLoginPressed = () => {
         navigation.navigate("Login" as never);
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.titleView}>
@@ -107,7 +107,7 @@ const RegisterPage = () => {
                 />
 
                 <View style={styles.addPictureView}>
-                    <ClickableImage onPress={onImagePressed} url={require('@/assets/images/addphoto.png')} type='Small' />
+                    <ClickableImage onPress={onImagePressed} url={image ? { uri: image } : require('@/assets/images/addphoto.png')} type='Small' />
                     <Text style={styles.textPicture}>Add a profile picture</Text>
                 </View>
 
@@ -163,5 +163,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default RegisterPage
-
+export default RegisterPage;

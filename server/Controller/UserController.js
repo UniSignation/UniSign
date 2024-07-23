@@ -138,3 +138,36 @@ exports.deleteCode = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const updateRecord = await Users.update(
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      },
+      {
+        where: { email: req.body.email },
+      }
+    );
+    if (updateRecord) {
+      return res.status(200).json({ message: 'User details updated successfully' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const updateRecord = await Users.destroy({
+        where: { email: req.body.email },
+      }
+    );
+    if (updateRecord) {
+      return res.status(200).json({ message: 'delete successfully' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

@@ -1,80 +1,144 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useState } from 'react'
-import {Title} from '@/components/Text'
-import { ClickableImage, ClickableText, Button } from '@/components/Button'
-import CustomInput from '@/components/CustomInput'
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Title } from '@/components/Text';
+import { ClickableImage, ClickableText, Button } from '@/components/Button';
+import CustomInput from '@/components/CustomInput';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EditProfileSchema, EditProfileInfo } from '@/schema/editProfileSchema';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../components/navigation';
+import axios from 'axios';
 
-const EditProfilePage = () => {
-    const navigation = useNavigation();
-    const [firstname, setFirstName] = useState("");
-    const [lastname, setLastName] = useState("");
-    const [email, setEmail] = useState("");
+const BASE_URL = 'http://192.168.1.39:3000';
 
-    const onSavePressed = () => {
-        console.warn("save press")
+type EditProfileRouteProp = RouteProp<RootStackParamList, 'Edit profile'>;
+type EditProfileNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Edit profile'>;
 
-        navigation.navigate("My profile" as never);
-    }
+type Props = {
+    route: EditProfileRouteProp;
+};
+
+const EditProfilePage = ({ route }: Props) => {
+    const [user, setUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null);
+    const [message, setMessage] = useState("");
+
+    const { control, handleSubmit, reset } = useForm<EditProfileInfo>({
+        resolver: zodResolver(EditProfileSchema),
+    });
+
+    const { email } = route.params;
+    const navigation = useNavigation<EditProfileNavigationProp>();
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.post(`${BASE_URL}/user/getUser`, { email });
+                setUser(response.data);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    setMessage(error.response?.data?.error || 'An error occurred');
+                } else {
+                    setMessage('An unknown error occurred');
+                }
+            }
+        };
+
+        fetchUser();
+    }, [email]);
+
+    const onSavePressed = async (data: EditProfileInfo) => {
+        const { firstName, lastName } = data;
+        try {
+            const response = await axios.post(`${BASE_URL}/user/updateUser`, { firstName, lastName, email});
+            setMessage(response.data.message);
+            navigation.navigate("Home", { firstName, email });
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                setMessage(error.response?.data?.error || 'An error occurred');
+            } else {
+                setMessage('An unknown error occurred');
+            }
+
+        }
+    };
 
     const onBackPressed = () => {
-        console.warn("back press")
-        navigation.navigate("My profile" as never);
+        navigation.navigate("My profile", { email });
+    };
 
-    }
     const onImagePressed = () => {
-        console.warn("Image press")
+        console.warn("Image press");
+    };
 
+    const onChangePassPressed = async () => {
+        try {
+            await axios.post(`${BASE_URL}/user/getUser`, { email });
+            const response = await axios.post(`${BASE_URL}/user/sendEmail`, { email });
+            setMessage(response.data.message);
+        navigation.navigate("Reset password", { email });
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            setMessage(error.response?.data?.error || 'An error occurred');
+        } else {
+            setMessage('An unknown error occurred');
+        }
     }
-    const onChangePassPressed = () => {
-        console.warn("Change password press")
-        navigation.navigate("Reset password" as never);
+    };
 
+    const onDeletePressed  = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/user/deleteUser`, { email });
+            setMessage(response.data.message);
+        navigation.navigate("Login");
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            setMessage(error.response?.data?.error || 'An error occurred');
+        } else {
+            setMessage('An unknown error occurred');
+        }
     }
-    const onDeletePressed = () => {
-        console.warn("Delete user press")
-        navigation.navigate("Login" as never);
+    };
+
+    if (!user) {
+        return <Text>Loading...</Text>;
     }
+
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}></View>
             <View style={styles.title}>
                 <Title text='Edit your profile' type='' />
             </View>
-            <View style={{ flex: 7, width: "100%", height: "100%" }}>
-
+            <View style={{ flex: 8, width: "100%", height: "100%" }}>
                 <View style={styles.addPictureView}>
                     <ClickableImage onPress={onImagePressed} url={require('@/assets/images/profile.png')} type='Big' />
                 </View>
                 <View style={styles.texts}>
                     <CustomInput
-                        placeholder="First Name"
-                        value={firstname}
-                        setValue={setFirstName}
+                        control={control}
+                        name="firstName"
+                        placeholder={user.firstName}
                     />
                     <CustomInput
-                        placeholder="Last Name"
-                        value={lastname}
-                        setValue={setLastName}
-                    />
-                    <CustomInput
-                        placeholder="Email"
-                        value={email}
-                        setValue={setEmail}
+                        control={control}
+                        name="lastName"
+                        placeholder={user.lastName}
                     />
                 </View>
                 <View style={styles.buttons}>
                     <ClickableText onPress={onChangePassPressed} text='Change password' type='Forgot' />
-                    <Button onPress={onSavePressed} text='Save' />
+                    <Button onPress={handleSubmit(onSavePressed)} text='Save' />
                     <ClickableText onPress={onBackPressed} text='Back' type='Forgot' />
                 </View>
             </View>
             <View style={styles.title}>
-            <ClickableText onPress={onDeletePressed} text='Delete user' type='Forgot' />
+                <ClickableText onPress={onDeletePressed} text='Delete user' type='Forgot' />
             </View>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -110,4 +174,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     }
 });
-export default EditProfilePage
+
+export default EditProfilePage;
