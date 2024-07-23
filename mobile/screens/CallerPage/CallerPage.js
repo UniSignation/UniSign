@@ -34,7 +34,7 @@ const configuration = {
   iceCandidatePoolSize: 10,
 };
 
-const URL = 'http://192.168.0.100:5000';
+const URL = 'http://192.168.0.103:5000';
 const socket = io(URL);
 
 const CallerPage = ({roomId, screens, setScreen}) => {
@@ -47,15 +47,16 @@ const CallerPage = ({roomId, screens, setScreen}) => {
   const [voiceText, setVoiceText] = useState('');
   let dict = new Map();
   dict.set('B', 'ב');
-  dict.set('I', 'י');
+  dict.set('I', 'ו');
   dict.set('C', 'כ');
   dict.set('L', 'ל');
-  dict.set('M', 'מ');
+  dict.set('M', 'ם');
   dict.set('N', 'נ');
   dict.set('S', 'ס');
   dict.set('R', 'ר');
   dict.set('W', 'ש');
   dict.set('T', 'ת');
+  dict.set('D', 'ו');
   useEffect(() => {
     startLocalStream();
   }, []);

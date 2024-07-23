@@ -3,18 +3,33 @@ import React, {useState, useEffect, useRef} from 'react';
 import Title from '../../components/Text/Title';
 import CustomInput from '../../components/CustomInput';
 import {Button, ClickableText} from '../../components/Button';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, RouteProp} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {ResetPassSchema, ResetPassInfo} from '../../schema/ResetPassSchema';
+import {Message} from '../../components/Text';
 import axios from 'axios';
+const BASE_URL = 'http:/192.168.1.39:3000';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../components/navigation';
 
-const BASE_URL = 'http://192.168.1.42:3000';
+type ResetPassPageRouteProp = RouteProp<RootStackParamList, 'Reset password'>;
+type ResetPassNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Reset password'
+>;
 
-const ResetPasswordPage = () => {
-  const navigation = useNavigation();
+type Props = {
+  route: ResetPassPageRouteProp;
+};
+
+const ResetPasswordPage = ({route}: Props) => {
+  const [message, setMessage] = useState('');
+  const navigation = useNavigation<ResetPassNavigationProp>();
+
   const [timeRemaining, setTimeRemaining] = useState(300); // 300 seconds = 5 minutes
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const {email} = route.params;
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -36,19 +51,57 @@ const ResetPasswordPage = () => {
     }
   }, [timeRemaining]);
 
-  const {control, handleSubmit} = useForm<ResetPassInfo>({
+  const {control, handleSubmit, reset} = useForm<ResetPassInfo>({
     resolver: zodResolver(ResetPassSchema),
   });
 
-  const onSendPressed = () => {
-    console.warn('send');
+  const onSendPressed = async (data: ResetPassInfo) => {
+    const {code, password} = data;
+    try {
+      const response = await axios.post(`${BASE_URL}/user/codeMatch`, {
+        email,
+        code,
+      });
+      await axios.post(`${BASE_URL}/user/updatePassword`, {email, password});
+      setMessage(response.data.message);
+      navigation.navigate('Login');
+      await axios.post(`${BASE_URL}/user/deleteCode`, {email});
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.error || 'An error occurred');
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
   };
 
-  const onLoginPressed = () => {
-    navigation.navigate('Login' as never);
+  const onLoginPressed = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/user/deleteCode`, {email});
+      setMessage(response.data.message);
+      navigation.navigate('Login');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.error || 'An error occurred');
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
   };
-  const onSendAgainPressed = () => {
-    console.warn('send again');
+  const onSendAgainPressed = async () => {
+    try {
+      await axios.post(`${BASE_URL}/user/deleteCode`, {email});
+      const response = await axios.post(`${BASE_URL}/user/sendEmail`, {email});
+      setMessage(response.data.message);
+      navigation.navigate('Reset password', {email});
+      reset();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.error || 'An error occurred');
+      } else {
+        setMessage('An unknown error occurred');
+      }
+    }
   };
   return (
     <View style={styles.container}>
@@ -63,7 +116,7 @@ const ResetPasswordPage = () => {
           name="code"
           placeholder="Enter your code"
         />
-        <Text style={{fontSize: 15, color: '#443532', fontWeight: 'bold'}}>
+        <Text style={styles.textStyle}>
           Time remaining: {Math.floor(timeRemaining / 60)}:{timeRemaining % 60}
         </Text>
         <View style={{flexDirection: 'row'}}>
@@ -88,6 +141,7 @@ const ResetPasswordPage = () => {
           placeholder="Confirm Password"
           secureTextEntry={true}
         />
+        {message ? <Message text={message} /> : null}
         <Button onPress={handleSubmit(onSendPressed)} text="SEND" />
         <ClickableText
           onPress={onLoginPressed}

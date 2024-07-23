@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import Title from '@/components/Text/Title'
-import CustomInput from '@/components/CustomInput'
-import { Button, ClickableText } from '@/components/Button'
+import Title from '../../components/Text/Title'
+import CustomInput from '../../components/CustomInput'
+import { Button, ClickableText } from '../../components/Button'
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ResetPassSchema, ResetPassInfo } from '../../schema/ResetPassSchema';
-import { Message } from '@/components/Text';
+import { Message } from '../../components/Text';
 import axios from 'axios';
 const BASE_URL = 'http:/192.168.0.102:3000'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
