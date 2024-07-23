@@ -107,7 +107,7 @@ const RegisterPage = () => {
                 />
 
                 <View style={styles.addPictureView}>
-                    <ClickableImage onPress={onImagePressed} url={image ? { uri: image } : require('@/assets/images/addphoto.png')} type='Small' />
+                    <ClickableImage onPress={onImagePressed} url={image ? { uri: image } : require('../../assets/images/addphoto.png')} type='Small' />
                     <Text style={styles.textPicture}>Add a profile picture</Text>
                 </View>
 

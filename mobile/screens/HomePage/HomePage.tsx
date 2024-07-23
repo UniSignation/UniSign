@@ -51,7 +51,7 @@ const HomePage = ({route}: Props) => {
         <View style={styles.addPictureView}>
           <ClickableImage
             onPress={onImagePressed}
-            url={require('@/assets/images/profile.png')}
+            url={require('../../assets/images/profile.png')}
             type="Circle"
           />
           <Text style={styles.textPhoto}>My profile</Text>

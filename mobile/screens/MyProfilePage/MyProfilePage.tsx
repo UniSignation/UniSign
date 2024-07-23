@@ -61,7 +61,7 @@ const MyProfilePage = ({ route }: Props) => {
                 <Title text='My profile' type='' />
             </View>
             <View style={styles.addPictureView}>
-                <ClickableImage onPress={onImagePressed} url={require('@/assets/images/profile.png')} type='Big' />
+                <ClickableImage onPress={onImagePressed} url={require('../../assets/images/profile.png')} type='Big' />
             </View>
             <View style={{ flex: 5, width: "100%", height: "100%" }}>
                 <View style={styles.topPage}>
