@@ -4,21 +4,23 @@ import { ClickableText, ClickableImage, Button } from '../../components/Button'
 import {Title} from '@/components/Text'
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../components/navigation';
-
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
+const BASE_URL = 'http:/192.168.1.39:3000'
 type HomePageRouteProp = RouteProp<RootStackParamList, 'Home'>;
+type HomePageNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 type Props = {
   route: HomePageRouteProp;
 };
 
 const HomePage = ({route}:Props) => {
-  const navigation = useNavigation();
-  const { firstName } = route.params;
+  const navigation = useNavigation<HomePageNavigationProp>();
+
+  const { firstName, email } = route.params;
 
   const onImagePressed = () => {
-    console.warn("Image press")
-
-    navigation.navigate("My profile" as never);
+    navigation.navigate("My profile", {email});
 
   }
   const onTestPressed = () => {
@@ -31,12 +33,11 @@ const HomePage = ({route}:Props) => {
     console.warn("Instruction press")
   }
   const onReportPressed = () => {
-    console.warn("Report press")
+    navigation.navigate("Report of problem",{email});
+
   }
   const onSignOutPressed = () => {
-    console.warn("Sign out press")
-    
-    navigation.navigate("Login" as never);
+    navigation.navigate("Login");
 
   }
   

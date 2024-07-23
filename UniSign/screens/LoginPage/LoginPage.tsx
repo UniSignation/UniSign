@@ -11,7 +11,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
 
 import axios from 'axios';
-const BASE_URL = 'http:/192.168.0.103:3000'
+const BASE_URL = 'http:/192.168.0.102:3000'
 
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -32,7 +32,7 @@ const LoginScreen = () => {
             setMessage(response.data.message);
             const user = await axios.post(`${BASE_URL}/user/getUser`, { email });
             const firstName= user.data.firstName;
-            navigation.navigate("Home", {firstName});
+            navigation.navigate("Home", {firstName,email});
             reset()
         } catch (error) {
             if (axios.isAxiosError(error)) {

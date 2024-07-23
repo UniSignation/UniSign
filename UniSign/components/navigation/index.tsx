@@ -9,15 +9,18 @@ import ForgotPasswordPage from '@/screens/ForgotPasswordPage';
 import ResetPasswordPage from '@/screens/ResetPasswordPage';
 import MyProfilePage from '@/screens/MyProfilePage';
 import EditProfilePage from '@/screens/EditProfilePage';
+import ReportOfProblemPage from '@/screens/ReportOfProblemPage';
+
 
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   'Forgot password': undefined;
-  Home: { firstName: string };
+  Home: { firstName:string, email: string };
   'Reset password': {email: string};
-  'My profile': undefined;
-  'Edit profile': undefined;
+  'My profile': {email: string};
+  'Edit profile': {email: string};
+  'Report of problem':{email: string}
 };
 
 const navTheme = {
@@ -40,6 +43,8 @@ const Navigation = () => {
         <Stack.Screen name="Reset password" component={ResetPasswordPage} />
         <Stack.Screen name="My profile" component={MyProfilePage} />
         <Stack.Screen name="Edit profile" component={EditProfilePage} />
+        <Stack.Screen name="Report of problem" component={ReportOfProblemPage} />
+
 
 
       </Stack.Navigator>
