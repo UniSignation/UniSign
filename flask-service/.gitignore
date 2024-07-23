@@ -1,0 +1,10 @@
+# Model
+ASL_my_model_V1.0.1.pth
+
+# Debug images and txt
+image.png
+tensor.png
+extraction_failure.txt
+
+# Python virtual env
+/venv
