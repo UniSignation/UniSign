@@ -1,26 +1,34 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  PermissionsAndroid,
-} from 'react-native';
-import {request, PERMISSIONS} from 'react-native-permissions';
-import {db} from '../../firebase';
-import {
-  addDoc,
-  collection,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  onSnapshot,
-  deleteField,
-} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Alert } from 'react-native';
+import { request, PERMISSIONS } from 'react-native-permissions';
+import { db } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { Button, ClickableText} from '../../components/Button';
+import { Title } from '../../components/Text';
+import CustomInput from '../../components/CustomInput';
 
-const RoomPage = ({setScreen, screens, setRoomId, roomId}) => {
+import axios from 'axios';
+const BASE_URL = 'http://192.168.0.105:3000';
+
+
+const RoomPage = ({ control, handleSubmit, setScreen, screens, setRoomId, roomId }) => {
+  const [message, setMessage] = useState("");
+
+  const onBackPressed = async () => {
+    try {
+        const response = await axios.post(`${BASE_URL}/user/getUser`, { email });
+        setMessage(response.data.message);
+        const firstName = response.data.firstName;
+        navigation.navigate("Home", { firstName, email });
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            setMessage(error.response?.data?.error || 'An error occurred');
+        } else {
+            setMessage('An unknown error occurred');
+        }
+    }
+}
+
   const onCallOrJoin = screen => {
     if (roomId.length > 0) {
       setScreen(screen);
@@ -69,38 +77,42 @@ const RoomPage = ({setScreen, screens, setRoomId, roomId}) => {
   };
 
   return (
-    <View>
-      <Text className="text-2xl font-bold text-center">Enter Room ID:</Text>
-      <TextInput
-        className="bg-white border-sky-600 border-2 mx-5 my-3 p-2 rounded-md"
-        value={roomId}
-        onChangeText={setRoomId}
+    <View style={styles.container}>
+      <View style={{flex:1}}/>
+       <View style={styles.titleView}>
+                <Title text='Enter Room ID:' type='' />
+            </View>
+      <CustomInput
+        control={control}
+        name="roomId"
+        placeholder=""
       />
-      <View  style = {{}} className="gap-y-3 mx-5 mt-2">
-        <TouchableOpacity
-          className="bg-sky-300 p-2  rounded-md"
-          onPress={() => onCallOrJoin(screens.CALL)}>
-          <Text className="color-black text-center text-xl font-bold ">
-            Start meeting
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="bg-sky-300 p-2 rounded-md"
-          onPress={() => checkMeeting()}>
-          <Text className="color-black text-center text-xl font-bold ">
-            Join meeting
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="bg-sky-300 p-2  rounded-md"
-          onPress={() => onCallOrJoin(screens.TEMP)}>
-          <Text className="color-black text-center text-xl font-bold ">
-            Temp screen
-          </Text>
-        </TouchableOpacity>
+      <View style={styles.inputContainer} >
+        <Button onPress={handleSubmit(() => onCallOrJoin(screens.CALL))} text="Start meeting" />
+        <Button onPress={handleSubmit(checkMeeting)} text="Join meeting" />
+        <ClickableText onPress={onBackPressed} text='Back' type='Forgot' />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      width:"100%"
+  },
+  titleView: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center"
+  },
+  inputContainer: {
+    flex: 3,
+    width: '100%',
+    alignItems: "center",
+},
+})
 
 export default RoomPage;
