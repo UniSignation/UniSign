@@ -22,6 +22,7 @@ export type RootStackParamList = {
   'My profile': {email: string};
   'Edit profile': {email: string};
   'Report of problem':{email: string}
+  'Video': {email: string};
 };
 
 const navTheme = {
@@ -45,6 +46,8 @@ const Navigation = () => {
         <Stack.Screen name="My profile" component={MyProfilePage} />
         <Stack.Screen name="Edit profile" component={EditProfilePage} />
         <Stack.Screen name="Report of problem" component={ReportOfProblemPage} />
+        <Stack.Screen name="Video" component={VideoRouterPage} />
+
 
 
 

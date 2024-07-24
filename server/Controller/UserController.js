@@ -75,7 +75,7 @@ exports.sendEmail = async (req, res) => {
     const msg = {
       to: email, // list of receivers
       from: 'unisignay@gmail.com', // sender address (verified sender)
-      templateId: '',
+
       dynamic_template_data: {
         temporaryCode: temporaryCode
       }
@@ -169,5 +169,23 @@ exports.deleteUser = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+exports.sendReport = async (req, res) => {
+  try {
+    
+
+    const msg = {
+      to: 'unisignay@gmail.com', // list of receivers
+      from:  req.body.email, // sender address (verified sender)
+     
+    };
+    await sgMail.send(msg);
+
+    return res.status(201).json({ mes: "You should receive an email" });
+  } catch (error) {
+    console.error("Caught error:", error);
+    return res.status(500).json({ error: error.message });
   }
 };

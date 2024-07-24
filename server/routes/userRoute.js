@@ -12,6 +12,8 @@ router.post('/updatePassword', userController.updatePassword);
 router.post('/deleteCode', userController.deleteCode);
 router.post('/updateUser', userController.updateUser);
 router.post('/deleteUser', userController.deleteUser);
+router.post('/sendReport', userController.sendReport);
+
 
 
 
