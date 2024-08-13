@@ -7,11 +7,18 @@ import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {ForgotPassSchema, ForgotPassInfo} from '../../schema/ForgotPassSchema';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
-const BASE_URL = 'http:/192.168.0.103:3000';
+const BASE_URL = 'http://192.168.0.101:3000';
+
+type ForgotPassScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Forgot password'
+>;
 
 const ForgotPasswordPage = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ForgotPassScreenNavigationProp>();
   const [message, setMessage] = useState('');
 
   const {control, handleSubmit} = useForm<ForgotPassInfo>({
@@ -21,9 +28,10 @@ const ForgotPasswordPage = () => {
   const onSendPressed = async (data: ForgotPassInfo) => {
     const {email} = data;
     try {
+      await axios.post(`${BASE_URL}/user/getUser`, {email});
       const response = await axios.post(`${BASE_URL}/user/sendEmail`, {email});
       setMessage(response.data.message);
-      navigation.navigate('Reset password' as never);
+      navigation.navigate('Reset password', {email});
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
@@ -34,7 +42,7 @@ const ForgotPasswordPage = () => {
   };
 
   const onLoginPressed = () => {
-    navigation.navigate('Login' as never);
+    navigation.navigate('Login');
   };
 
   return (
