@@ -71,8 +71,7 @@ def predict_image(model, transform, device, class_names, image_base64):
         
         return predicted_class
 
-def extract_view(image_data, new_border_color=None, new_border_thickness=0):
-    border_color = [0, 255, 255]
+def extract_view(image_data, border_color):
     nparr = np.frombuffer(base64.b64decode(image_data), np.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
@@ -81,28 +80,12 @@ def extract_view(image_data, new_border_color=None, new_border_thickness=0):
     upper_color = np.array([border_color[0] + 10, 255, 255])
     mask = cv2.inRange(hsv, lower_color, upper_color)
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
         if w > 50 and h > 50:
-            # Remove the red border by cropping a few pixels inside the detected rectangle
-            margin = 12  # Adjust this value to remove the red border as needed
-            extracted_view = image[y+margin:y+h-margin, x+margin:x+w-margin]
-
-            if new_border_color is not None and new_border_thickness > 0:
-                # Add new border to the image
-                extracted_view = cv2.copyMakeBorder(
-                    extracted_view,
-                    top=new_border_thickness,
-                    bottom=new_border_thickness,
-                    left=new_border_thickness,
-                    right=new_border_thickness,
-                    borderType=cv2.BORDER_CONSTANT,
-                    value=new_border_color
-                )
-
+            extracted_view = image[y:y+h, x:x+w]
             _, buffer = cv2.imencode('.png', extracted_view)
-            return base64.b64encode(buffer).decode('utf-8')
+            return base64.b64encode(buffer)
     return None
 
 app = Flask(__name__)
@@ -153,7 +136,8 @@ def handle_leave(data):
 def handle_send_image(data):
     roomId = data['roomId']
     image = data['image']
-    extracted_image = extract_view(image)
+    border_color_hsv = [0, 255, 255]
+    extracted_image = extract_view(image, border_color_hsv)
     if not extracted_image:
         with open("extraction_failure.txt","w+") as f:
             f.write(str(image))

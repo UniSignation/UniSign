@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Alert } from 'react-native';
-import { request, PERMISSIONS } from 'react-native-permissions';
-import { db } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { Button, ClickableText} from '../../components/Button';
-import { Title } from '../../components/Text';
+import React, {useEffect, useState} from 'react';
+import {TextInput, Text, View, StyleSheet, Alert} from 'react-native';
+import {request, PERMISSIONS} from 'react-native-permissions';
+import {db} from '../../firebase';
+import {doc, getDoc} from 'firebase/firestore';
+import {Button, ClickableText} from '../../components/Button';
+import {Title} from '../../components/Text';
 import CustomInput from '../../components/CustomInput';
 
 import axios from 'axios';
-const BASE_URL = 'http://192.168.0.105:3000';
+const BASE_URL = 'http://192.168.0.101:3000';
 
-
-const RoomPage = ({ control, handleSubmit, setScreen, screens, setRoomId, roomId }) => {
-  const [message, setMessage] = useState("");
+const RoomPage = ({
+  control,
+  handleSubmit,
+  setScreen,
+  screens,
+  setRoomId,
+  roomId,
+}) => {
+  const [message, setMessage] = useState('');
 
   const onBackPressed = async () => {
     try {
-        const response = await axios.post(`${BASE_URL}/user/getUser`, { email });
-        setMessage(response.data.message);
-        const firstName = response.data.firstName;
-        navigation.navigate("Home", { firstName, email });
+      const response = await axios.post(`${BASE_URL}/user/getUser`, {email});
+      setMessage(response.data.message);
+      const firstName = response.data.firstName;
+      navigation.navigate('Home', {firstName, email});
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            setMessage(error.response?.data?.error || 'An error occurred');
-        } else {
-            setMessage('An unknown error occurred');
-        }
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.error || 'An error occurred');
+      } else {
+        setMessage('An unknown error occurred');
+      }
     }
-}
+  };
 
   const onCallOrJoin = screen => {
     if (roomId.length > 0) {
@@ -78,19 +84,29 @@ const RoomPage = ({ control, handleSubmit, setScreen, screens, setRoomId, roomId
 
   return (
     <View style={styles.container}>
-      <View style={{flex:1}}/>
-       <View style={styles.titleView}>
-                <Title text='Enter Room ID:' type='' />
-            </View>
-      <CustomInput
+      <View style={{flex: 1}} />
+      <View style={styles.titleView}>
+        <Title text="Enter Room ID:" type="" />
+      </View>
+      {/* <CustomInput
         control={control}
         name="roomId"
         placeholder=""
       />
-      <View style={styles.inputContainer} >
-        <Button onPress={handleSubmit(() => onCallOrJoin(screens.CALL))} text="Start meeting" />
-        <Button onPress={handleSubmit(checkMeeting)} text="Join meeting" />
-        <ClickableText onPress={onBackPressed} text='Back' type='Forgot' />
+       */}
+      <TextInput
+      style={{width:'70%'}}
+        className="bg-white border-sky-600 border-2 mx-5 my-3 p-2 rounded-md "
+        value={roomId}
+        onChangeText={setRoomId}
+      />
+      <View style={styles.inputContainer}>
+        <Button
+          onPress={() => onCallOrJoin(screens.CALL)}
+          text="Start meeting"
+        />
+        <Button onPress={checkMeeting} text="Join meeting" />
+        <ClickableText onPress={onBackPressed} text="Back" type="Forgot" />
       </View>
     </View>
   );
@@ -98,21 +114,21 @@ const RoomPage = ({ control, handleSubmit, setScreen, screens, setRoomId, roomId
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      width:"100%"
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   titleView: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center"
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputContainer: {
     flex: 3,
     width: '100%',
-    alignItems: "center",
-},
-})
+    alignItems: 'center',
+  },
+});
 
 export default RoomPage;

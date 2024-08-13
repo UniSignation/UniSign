@@ -29,8 +29,7 @@ const HomePage = ({route}: Props) => {
     console.warn('Test press');
   };
   const onUsePressed = () => {
-    navigation.navigate('Video');
-   
+    navigation.navigate('Video', {email});
   };
   const onInstructionPressed = () => {
     console.warn('Instruction press');
