@@ -10,13 +10,13 @@ import { initializeFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAiWGxgwR651SGdheIiCtElFIeiXEz0kZo",
-  authDomain: "unisign-c97e3.firebaseapp.com",
-  projectId: "unisign-c97e3",
-  storageBucket: "unisign-c97e3.appspot.com",
-  messagingSenderId: "101276057076",
-  appId: "1:101276057076:web:7601d7e4424f98939f4da1",
-  measurementId: "G-2FERBXVCW9"
+  apiKey: "AIzaSyBNO5W3g0dEcBT2SsOsRXqwXVC24_h2HBs",
+  authDomain: "unisign-sumbit.firebaseapp.com",
+  projectId: "unisign-sumbit",
+  storageBucket: "unisign-sumbit.appspot.com",
+  messagingSenderId: "611590544476",
+  appId: "1:611590544476:web:b0c3d282f6c73dc3e75a99",
+  measurementId: "G-L4YX1QXNSP"
 };
 
 // Initialize Firebase

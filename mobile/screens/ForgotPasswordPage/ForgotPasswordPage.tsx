@@ -10,7 +10,7 @@ import {ForgotPassSchema, ForgotPassInfo} from '../../schema/ForgotPassSchema';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
-const BASE_URL = 'http://192.168.0.101:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 type ForgotPassScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,8 +28,8 @@ const ForgotPasswordPage = () => {
   const onSendPressed = async (data: ForgotPassInfo) => {
     const {email} = data;
     try {
-      await axios.post(`${BASE_URL}/user/getUser`, {email});
-      const response = await axios.post(`${BASE_URL}/user/sendEmail`, {email});
+      await axios.post(`${URL}/user/getUser`, {email});
+      const response = await axios.post(`${URL}/user/sendEmail`, {email});
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
     } catch (error) {
