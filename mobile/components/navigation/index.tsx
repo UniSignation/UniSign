@@ -12,17 +12,16 @@ import VideoRouterPage from '../../screens/VideoRouterPage';
 import EditProfilePage from '../../screens/EditProfilePage';
 import ReportOfProblemPage from '../../screens/ReportOfProblemPage';
 
-
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   'Forgot password': undefined;
-  Home: { firstName:string, email: string };
+  Home: {firstName: string; email: string};
   'Reset password': {email: string};
   'My profile': {email: string};
   'Edit profile': {email: string};
-  'Report of problem':{email: string}
-  'Video': {email: string};
+  'Report of problem': {email: string};
+  Video: {email: string};
 };
 
 const navTheme = {
@@ -37,7 +36,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigation = () => {
   return (
     <NavigationContainer theme={navTheme} independent={true}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Video" component={VideoRouterPage} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={RegisterPage} />
@@ -47,13 +46,9 @@ const Navigation = () => {
         <Stack.Screen name="My profile" component={MyProfilePage} />
         <Stack.Screen name="Edit profile" component={EditProfilePage} />
         <Stack.Screen name="Report of problem" component={ReportOfProblemPage} />
-
-
-
-
       </Stack.Navigator>
     </NavigationContainer>
-  )
-}
+  );
+};
 
 export default Navigation;

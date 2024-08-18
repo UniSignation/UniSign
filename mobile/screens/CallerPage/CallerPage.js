@@ -34,7 +34,7 @@ const configuration = {
   iceCandidatePoolSize: 10,
 };
 
-const URL = 'http://192.168.0.102:5000';
+const URL = `${process.env.BASE_URL}:${process.env.FLASK_PORT}`;
 const socket = io(URL);
 
 const CallerPage = ({roomId, screens, setScreen}) => {

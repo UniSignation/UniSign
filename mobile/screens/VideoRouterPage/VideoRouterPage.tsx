@@ -1,19 +1,17 @@
 import React, {useState} from 'react';
 import {SafeAreaView, Text} from 'react-native';
-
 import RoomPage from '../RoomPage';
 import CallerPage from '../CallerPage';
 import JoinerPage from '../JoinerPage';
 import TempScreen from '../TempScreen';
-import { RoomPageSchema, RoomPageInfo } from '../../schema/RoomPageSchema';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
+import {RoomPageSchema, RoomPageInfo} from '../../schema/RoomPageSchema';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
 
 const VideoRouterPage = () => {
-  const { control, handleSubmit, reset } = useForm<RoomPageInfo>({
+  const {control, handleSubmit, reset} = useForm<RoomPageInfo>({
     resolver: zodResolver(RoomPageSchema),
-});
+  });
   const screens = {
     ROOM: 'JOIN_ROOM',
     CALL: 'CALL',
@@ -29,13 +27,12 @@ const VideoRouterPage = () => {
     case screens.ROOM:
       content = (
         <RoomPage
-        control = {control}
-        handleSubmit = {handleSubmit}
+          control={control}
+          handleSubmit={handleSubmit}
           roomId={roomId}
           setRoomId={setRoomId}
           screens={screens}
           setScreen={setScreen}
-        
         />
       );
       break;

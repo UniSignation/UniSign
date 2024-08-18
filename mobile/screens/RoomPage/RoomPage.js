@@ -5,9 +5,8 @@ import {db} from '../../firebase';
 import {doc, getDoc} from 'firebase/firestore';
 import {Button, ClickableText} from '../../components/Button';
 import {Title} from '../../components/Text';
-
 import axios from 'axios';
-const BASE_URL = 'http://192.168.0.102:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 const RoomPage = ({
   control,
@@ -21,7 +20,7 @@ const RoomPage = ({
 
   const onBackPressed = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/user/getUser`, {email});
+      const response = await axios.post(`${URL}/user/getUser`, {email});
       setMessage(response.data.message);
       const firstName = response.data.firstName;
       navigation.navigate('Home', {firstName, email});
@@ -94,7 +93,7 @@ const RoomPage = ({
       />
        */}
       <TextInput
-      style={{width:'70%'}}
+        style={{width: '70%'}}
         className="bg-white border-sky-600 border-2 mx-5 my-3 p-2 rounded-md "
         value={roomId}
         onChangeText={setRoomId}
