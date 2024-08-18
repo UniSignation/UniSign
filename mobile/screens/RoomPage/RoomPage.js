@@ -5,10 +5,9 @@ import {db} from '../../firebase';
 import {doc, getDoc} from 'firebase/firestore';
 import {Button, ClickableText} from '../../components/Button';
 import {Title} from '../../components/Text';
-import CustomInput from '../../components/CustomInput';
 
 import axios from 'axios';
-const BASE_URL = 'http://192.168.0.101:3000';
+const BASE_URL = 'http://192.168.0.102:3000';
 
 const RoomPage = ({
   control,

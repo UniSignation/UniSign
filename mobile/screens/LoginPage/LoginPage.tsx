@@ -11,7 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 
 import axios from 'axios';
-const BASE_URL = 'http://192.168.0.105:3000';
+const BASE_URL = 'http://192.168.0.102:3000';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

@@ -38,6 +38,7 @@ const Navigation = () => {
   return (
     <NavigationContainer theme={navTheme} independent={true}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Video" component={VideoRouterPage} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Register" component={RegisterPage} />
         <Stack.Screen name="Forgot password" component={ForgotPasswordPage} />
@@ -46,7 +47,6 @@ const Navigation = () => {
         <Stack.Screen name="My profile" component={MyProfilePage} />
         <Stack.Screen name="Edit profile" component={EditProfilePage} />
         <Stack.Screen name="Report of problem" component={ReportOfProblemPage} />
-        <Stack.Screen name="Video" component={VideoRouterPage} />
 
 
 

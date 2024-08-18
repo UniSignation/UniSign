@@ -33,7 +33,7 @@ const configuration = {
   iceCandidatePoolSize: 10,
 };
 
-const URL = 'http://192.168.0.103:5000';
+const URL = 'http://192.168.0.102:5000';
 const socket = io(URL);
 
 const JoinerPage = ({roomId, screens, setScreen}) => {
