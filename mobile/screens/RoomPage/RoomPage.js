@@ -6,6 +6,9 @@ import {doc, getDoc} from 'firebase/firestore';
 import {Button, ClickableText} from '../../components/Button';
 import {Title} from '../../components/Text';
 import axios from 'axios';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import {RootStackParamList} from '../../components/navigation';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 const RoomPage = ({
@@ -15,9 +18,10 @@ const RoomPage = ({
   screens,
   setRoomId,
   roomId,
+  email
 }) => {
   const [message, setMessage] = useState('');
-
+  const navigation = useNavigation();
   const onBackPressed = async () => {
     try {
       const response = await axios.post(`${URL}/user/getUser`, {email});

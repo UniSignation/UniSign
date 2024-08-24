@@ -6,12 +6,23 @@ import JoinerPage from '../JoinerPage';
 import TempScreen from '../TempScreen';
 import {RoomPageSchema, RoomPageInfo} from '../../schema/RoomPageSchema';
 import {useForm} from 'react-hook-form';
+import { RootStackParamList } from '../../components/navigation';
+import { useNavigation, RouteProp } from '@react-navigation/native';
 import {zodResolver} from '@hookform/resolvers/zod';
 
-const VideoRouterPage = () => {
+type VideoRouteProp = RouteProp<RootStackParamList, 'Video'>;
+type Props = {
+  route: VideoRouteProp;
+};
+
+const VideoRouterPage = ({ route }: Props) => {
   const {control, handleSubmit, reset} = useForm<RoomPageInfo>({
     resolver: zodResolver(RoomPageSchema),
   });
+  const { email} = route.params; 
+
+
+
   const screens = {
     ROOM: 'JOIN_ROOM',
     CALL: 'CALL',
@@ -33,6 +44,7 @@ const VideoRouterPage = () => {
           setRoomId={setRoomId}
           screens={screens}
           setScreen={setScreen}
+          email={email}
         />
       );
       break;

@@ -11,8 +11,8 @@ import { RegisterSchema, RegisterInfo } from '../../schema/registerSchema';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
 import { launchImageLibrary } from 'react-native-image-picker';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
-const BASE_URL = 'http://192.168.1.39:3000';
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterPage = () => {
@@ -54,19 +54,41 @@ const RegisterPage = () => {
 
     const onRegisterPressed = async (data: RegisterInfo) => {
         const { firstName, lastName, email, password } = data;
-        try {
-            const response = await axios.post(`${BASE_URL}/user/sign-up`, { firstName, lastName, email, password, usesService, profileImage: image });
-            setMessage(response.data.message);
-            navigation.navigate("Home", { firstName, email });
-        } catch (error) {
-            console.error(error);
-            if (axios.isAxiosError(error)) {
-                setMessage(error.response?.data?.error || 'An error occurred');
-            } else {
-                setMessage('An unknown error occurred');
-            }
+      
+        const formData = new FormData();
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('usesService', usesService);
+      
+        if (image) {
+          formData.append('profileImage', {
+            uri: image,
+            type: 'image/jpeg', // או 'image/png'
+            name: 'profileImage.jpg'
+          });
         }
-    };
+      
+        try {
+          const response = await axios.post(`${URL}/user/sign-up`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          setMessage(response.data.message);
+          navigation.navigate("Home", { firstName, email });
+        } catch (error) {
+          console.error('ERROR', error);
+          if (axios.isAxiosError(error)) {
+            setMessage(error.response?.data?.error || 'An error occurred');
+          } else {
+            setMessage('An unknown error occurred');
+          }
+        }
+      };
+      
+      
 
     const onLoginPressed = () => {
         navigation.navigate("Login" as never);

@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
 
+
 exports.getAllUsers = async (req, res) => {
   try {
     const records = await Users.findAll();
@@ -13,20 +14,42 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+// exports.signUp = async (req, res) => {
+//   try {
+//     const newRecord = await Users.create({
+//       firstName: req.body.firstName,
+//       lastName: req.body.lastName,
+//       email: req.body.email,
+//       usesService: req.body.usesService,
+//       password: req.body.password,
+//       profileImage: req.file ? req.file.path : null, // שמירת נתיב התמונה
+//     });
+//     res.status(201).json(newRecord);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 exports.signUp = async (req, res) => {
   try {
+    if (!req.file) {
+      throw new Error("File not uploaded");
+    }
+    
     const newRecord = await Users.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
       usesService: req.body.usesService,
-      password: req.body.password
+      password: req.body.password,
+      profileImage: req.file.path // שמירת הנתיב של התמונה
     });
     res.status(201).json(newRecord);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error during signUp:", error);
+    res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
@@ -75,7 +98,6 @@ exports.sendEmail = async (req, res) => {
     const msg = {
       to: email, // list of receivers
       from: 'unisignay@gmail.com', // sender address (verified sender)
-
       dynamic_template_data: {
         temporaryCode: temporaryCode
       }
@@ -174,12 +196,10 @@ exports.deleteUser = async (req, res) => {
 
 exports.sendReport = async (req, res) => {
   try {
-    
-
     const msg = {
-      to: 'unisignay@gmail.com', // list of receivers
-      from:  req.body.email, // sender address (verified sender)
-     
+      to: 'unisignay@gmail.com',
+      from:  'unisignay@gmail.com', 
+      subject: 'Report problem',
     };
     await sgMail.send(msg);
 

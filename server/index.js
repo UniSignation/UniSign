@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const path = require('path');
 
 const { sequelize } = require('./models/db');
 const userRouters = require('./routes/userRoute');
+
+// הגדרת נתיב לשרת קבצים סטטיים מתוך תיקיית 'uploads'
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json());
 

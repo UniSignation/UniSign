@@ -7,8 +7,7 @@ import { RootStackParamList } from '../../components/navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import axios from 'axios';
-
-const BASE_URL = 'http://192.168.1.39:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 type MyProfileRouteProp = RouteProp<RootStackParamList, 'My profile'>;
 type MyProfileNavigationProp = NativeStackNavigationProp<RootStackParamList, 'My profile'>;
@@ -22,14 +21,18 @@ const MyProfilePage = ({ route }: Props) => {
     const [message, setMessage] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [profileImage, setProfileImage] = useState<string | null>(null);
     const { email } = route.params;
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const user = await axios.post(`${BASE_URL}/user/getUser`, { email });
-                setFirstName(user.data.firstName);
-                setLastName(user.data.lastName);
+                const response = await axios.post(`${URL}/user/getUser`, { email });
+                const user = response.data;
+                setFirstName(user.firstName);
+                setLastName(user.lastName);
+                setProfileImage(user.profileImage || null); // הגדרת התמונה
+                console.log(profileImage , `${URL}/${profileImage}`)
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     setMessage(error.response?.data?.error || 'An error occurred');
@@ -43,15 +46,15 @@ const MyProfilePage = ({ route }: Props) => {
     }, [email]);
 
     const onEditPressed = () => {
-        navigation.navigate("Edit profile", {email});
+        navigation.navigate("Edit profile", { email });
     };
 
     const onBackPressed = () => {
-        navigation.navigate("Home", {firstName, email});
-    };
-
-    const onImagePressed = () => {
-        navigation.navigate("My profile", {email});
+        if (email === 'UnisignAY@gmail.com') {
+            navigation.navigate('HomeAdmin', { firstName, email });
+        } else {
+            navigation.navigate('Home', { firstName, email });
+        }
     };
 
     return (
@@ -61,7 +64,11 @@ const MyProfilePage = ({ route }: Props) => {
                 <Title text='My profile' type='' />
             </View>
             <View style={styles.addPictureView}>
-                <ClickableImage onPress={onImagePressed} url={require('../../assets/images/profile.png')} type='Big' />
+                <Image
+                    source={profileImage ? { uri: `${URL}/${profileImage}` } : require('../../assets/images/profile.png')}
+                    style={styles.profileImage}
+                    resizeMode="cover"
+                />
             </View>
             <View style={{ flex: 5, width: "100%", height: "100%" }}>
                 <View style={styles.topPage}>
@@ -85,7 +92,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        // backgroundColor: 'grey'
     },
     title: {
         flex: 1,
@@ -101,12 +107,10 @@ const styles = StyleSheet.create({
         flex: 3,
         alignItems: "center",
         justifyContent: "center",
-        // backgroundColor: 'pink' 
     },
     topPage: {
         flex: 2,
         flexDirection: 'row',
-        // backgroundColor: 'red'
     },
     text: {
         marginBottom: 10,
@@ -119,7 +123,11 @@ const styles = StyleSheet.create({
         flex: 4,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    profileImage: {
+        width: 100, // הגדרת רוחב התמונה
+        height: 100, // הגדרת גובה התמונה
+    },
 });
 
 export default MyProfilePage;
