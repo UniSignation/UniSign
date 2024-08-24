@@ -9,7 +9,8 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {ResetPassSchema, ResetPassInfo} from '../../schema/ResetPassSchema';
 import {Message} from '../../components/Text';
 import axios from 'axios';
-const BASE_URL = 'http:/192.168.1.39:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
+
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 
@@ -58,14 +59,14 @@ const ResetPasswordPage = ({route}: Props) => {
   const onSendPressed = async (data: ResetPassInfo) => {
     const {code, password} = data;
     try {
-      const response = await axios.post(`${BASE_URL}/user/codeMatch`, {
+      const response = await axios.post(`${URL}/user/codeMatch`, {
         email,
         code,
       });
-      await axios.post(`${BASE_URL}/user/updatePassword`, {email, password});
+      await axios.post(`${URL}/user/updatePassword`, {email, password});
       setMessage(response.data.message);
       navigation.navigate('Login');
-      await axios.post(`${BASE_URL}/user/deleteCode`, {email});
+      await axios.post(`${URL}/user/deleteCode`, {email});
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
@@ -77,7 +78,7 @@ const ResetPasswordPage = ({route}: Props) => {
 
   const onLoginPressed = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/user/deleteCode`, {email});
+      const response = await axios.post(`${URL}/user/deleteCode`, {email});
       setMessage(response.data.message);
       navigation.navigate('Login');
     } catch (error) {
@@ -90,8 +91,8 @@ const ResetPasswordPage = ({route}: Props) => {
   };
   const onSendAgainPressed = async () => {
     try {
-      await axios.post(`${BASE_URL}/user/deleteCode`, {email});
-      const response = await axios.post(`${BASE_URL}/user/sendEmail`, {email});
+      await axios.post(`${URL}/user/deleteCode`, {email});
+      const response = await axios.post(`${URL}/user/sendEmail`, {email});
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
       reset();

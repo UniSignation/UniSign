@@ -34,6 +34,7 @@ const configuration = {
 };
 
 const URL = `${process.env.BASE_URL}:${process.env.FLASK_PORT}`;
+
 const socket = io(URL);
 
 const JoinerPage = ({roomId, screens, setScreen}) => {

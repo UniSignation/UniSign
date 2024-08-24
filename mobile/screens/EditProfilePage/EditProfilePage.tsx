@@ -10,8 +10,7 @@ import { EditProfileSchema, EditProfileInfo } from '../../schema/editProfileSche
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
 import axios from 'axios';
-
-const BASE_URL = 'http://192.168.1.39:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 type EditProfileRouteProp = RouteProp<RootStackParamList, 'Edit profile'>;
 type EditProfileNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Edit profile'>;
@@ -34,7 +33,7 @@ const EditProfilePage = ({ route }: Props) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.post(`${BASE_URL}/user/getUser`, { email });
+                const response = await axios.post(`${URL}/user/getUser`, { email });
                 setUser(response.data);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
@@ -51,7 +50,7 @@ const EditProfilePage = ({ route }: Props) => {
     const onSavePressed = async (data: EditProfileInfo) => {
         const { firstName, lastName } = data;
         try {
-            const response = await axios.post(`${BASE_URL}/user/updateUser`, { firstName, lastName, email});
+            const response = await axios.post(`${URL}/user/updateUser`, { firstName, lastName, email});
             setMessage(response.data.message);
             navigation.navigate("Home", { firstName, email });
         } catch (error) {
@@ -74,8 +73,8 @@ const EditProfilePage = ({ route }: Props) => {
 
     const onChangePassPressed = async () => {
         try {
-            await axios.post(`${BASE_URL}/user/getUser`, { email });
-            const response = await axios.post(`${BASE_URL}/user/sendEmail`, { email });
+            await axios.post(`${URL}/user/getUser`, { email });
+            const response = await axios.post(`${URL}/user/sendEmail`, { email });
             setMessage(response.data.message);
         navigation.navigate("Reset password", { email });
     } catch (error) {
@@ -89,7 +88,7 @@ const EditProfilePage = ({ route }: Props) => {
 
     const onDeletePressed  = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/user/deleteUser`, { email });
+            const response = await axios.post(`${URL}/user/deleteUser`, { email });
             setMessage(response.data.message);
         navigation.navigate("Login");
     } catch (error) {

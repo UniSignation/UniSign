@@ -1,43 +1,50 @@
 import {View, StyleSheet, Text} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {ClickableText, ClickableImage, Button} from '../../components/Button';
-import {Title} from '../../components/Text';
+import {Title, Message} from '../../components/Text';
 import {useNavigation, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../components/navigation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
-
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
-
-type HomePageRouteProp = RouteProp<RootStackParamList, 'Home'>;
-type HomePageNavigationProp = NativeStackNavigationProp<
+type HomeAdminPageRouteProp = RouteProp<RootStackParamList, 'HomeAdmin'>;
+type HomeAdminPageNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Home'
+  'HomeAdmin'
 >;
 
 type Props = {
-  route: HomePageRouteProp;
+  route: HomeAdminPageRouteProp;
 };
 
-const HomePage = ({route}: Props) => {
-  const navigation = useNavigation<HomePageNavigationProp>();
+const HomeAdminPage = ({route}: Props) => {
+  const navigation = useNavigation<HomeAdminPageNavigationProp>();
+  const [message, setMessage] = useState("");
 
   const {firstName, email} = route.params;
 
   const onImagePressed = () => {
     navigation.navigate('My profile', {email});
   };
-  const onTestPressed = () => {
-    console.warn('Test press');
-  };
-  const onUsePressed = () => {
-    navigation.navigate('Video', {email});
-  };
-  const onInstructionPressed = () => {
+
+  const onUsersPressed = async () => {
+  try {
+      const response = await axios.get(`${URL}/user/getAllUser`, );
+      
+      setMessage(response.data.message);
+      const users = response.data; 
+      navigation.navigate("Users Table", { users ,firstName, email});
+  } catch (error) {
+      if (axios.isAxiosError(error)) {
+          setMessage(error.response?.data?.error || 'An error occurred');
+      } else {
+          setMessage('An unknown error occurred');
+      }
+  }
+}
+
+  const onStatisticsPressed = () => {
     console.warn('Instruction press');
-  };
-  const onReportPressed = () => {
-    navigation.navigate('Report of problem', {email});
   };
   const onSignOutPressed = () => {
     navigation.navigate('Login');
@@ -59,12 +66,11 @@ const HomePage = ({route}: Props) => {
           <Text style={styles.textPhoto}>My profile</Text>
         </View>
       </View>
+      {message ? <Message text={message} /> : null}
 
       <View style={styles.buttons}>
-        <Button onPress={onTestPressed} text="Test service" />
-        <Button onPress={onUsePressed} text="Use service" />
-        <Button onPress={onInstructionPressed} text="Instruction" />
-        <Button onPress={onReportPressed} text="Report of problem" />
+        <Button onPress={onUsersPressed} text="Users" />
+        <Button onPress={onStatisticsPressed} text="Statistics" />
       </View>
       <View style={styles.bottomPage}>
         <ClickableText
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttons: {
-    flex: 5,
+    flex: 4,
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green'
@@ -117,4 +123,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-export default HomePage;
+export default HomeAdminPage;

@@ -11,7 +11,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
-
 type ForgotPassScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Forgot password'

@@ -12,7 +12,6 @@ import {RootStackParamList} from '../../components/navigation';
 
 import axios from 'axios';
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
-
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Login'
@@ -36,7 +35,9 @@ const LoginScreen = () => {
       setMessage(response.data.message);
       const user = await axios.post(`${URL}/user/getUser`, {email});
       const firstName = user.data.firstName;
-      navigation.navigate('Home', {firstName, email});
+      if (email === 'UnisignAY@gmail.com')
+          navigation.navigate('HomeAdmin', {firstName, email});
+      else navigation.navigate('Home', {firstName, email});
       reset();
     } catch (error) {
       if (axios.isAxiosError(error)) {

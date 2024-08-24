@@ -11,8 +11,7 @@ import { Message } from '../../components/Text';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../components/navigation';
-
-const BASE_URL = 'http://192.168.1.39:3000';
+const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 type ReportOfProblemRouteProp = RouteProp<RootStackParamList, 'Report of problem'>;
 type ReportOfProblemNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Report of problem'>;
 
@@ -33,9 +32,9 @@ const ReportOfProblemPage = ({ route }: Props) => {
 
     const onSendPressed = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/user/sendReport`, { email });
+            const response = await axios.post(`${URL}/user/sendReport`, { email });
             setMessage(response.data.message);
-            const User = await axios.post(`${BASE_URL}/user/getUser`, { email });
+            const User = await axios.post(`${URL}/user/getUser`, { email });
             const firstName = User.data.firstName;
             navigation.navigate("Home", { firstName, email });
         } catch (error) {
@@ -49,7 +48,7 @@ const ReportOfProblemPage = ({ route }: Props) => {
     }
     const onBackPressed = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/user/getUser`, { email });
+            const response = await axios.post(`${URL}/user/getUser`, { email });
             setMessage(response.data.message);
             const firstName = response.data.firstName;
             navigation.navigate("Home", { firstName, email });
