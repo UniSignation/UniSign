@@ -23,6 +23,8 @@ import {
 import CallActionBox from '../../components/CallActionBox';
 import io from 'socket.io-client';
 import Voice from '@react-native-voice/voice';
+import CustomButton from '../../components/CustomButton';
+import EnglishToHebrew from '../../utils/constants/EnglishToHebrew';
 
 const configuration = {
   iceServers: [
@@ -47,18 +49,7 @@ const JoinerPage = ({roomId, screens, setScreen}) => {
   const [started, setStarted] = useState(false);
   const [voiceText, setVoiceText] = useState('');
   let tempArray = [];
-  let dict = new Map();
-  dict.set('B', 'ב');
-  dict.set('I', 'ו');
-  dict.set('C', 'כ');
-  dict.set('L', 'ל');
-  dict.set('M', 'ם');
-  dict.set('N', 'נ');
-  dict.set('S', 'ס');
-  dict.set('R', 'ר');
-  dict.set('W', 'ש');
-  dict.set('T', 'ת');
-  dict.set('D', 'ו');
+  
   //Automatically start stream
   useEffect(() => {
     startLocalStream();
@@ -93,10 +84,10 @@ const JoinerPage = ({roomId, screens, setScreen}) => {
         setSignText(signText => signText.slice(0, -1));
       } else if (data.prediction == 'space') {
         setSignText(signText => signText + ' ');
-      } else if (dict.get(data.prediction) == undefined) {
-        // setSignText(signText => signText + 'א');
+      } else if (EnglishToHebrew[data.prediction] == undefined) {
+        // nothing
       } else {
-        setSignText(signText => signText + dict.get(data.prediction));
+        setSignText(signText => signText + EnglishToHebrew[data.prediction]);
       }
     });
     return () => {
@@ -331,9 +322,15 @@ const JoinerPage = ({roomId, screens, setScreen}) => {
           </Text>
         </View>
         <View style={styles.buttonView}>
-          <Button
+          {/* <Button
             title={started ? 'Stop Recording' : 'Start Recording'}
             onPress={started ? stopRecording : startRecording}
+            style={{color:'black'}}
+          /> */}
+          <CustomButton
+            started={started}
+            startRecording={startRecording}
+            stopRecording={stopRecording}
           />
         </View>
       </View>
@@ -360,7 +357,7 @@ const styles = StyleSheet.create({
     height: '95%',
     aspectRatio: 1,
     borderWidth: 4,
-    borderColor: 'red',
+    // borderColor: 'red',
     borderRadius: 5,
   },
   speakerContainer: {
@@ -372,7 +369,7 @@ const styles = StyleSheet.create({
     height: '95%',
     aspectRatio: 1,
     borderWidth: 4,
-    borderColor: 'white',
+    // borderColor: 'white',
     borderRadius: 5,
   },
   textContainer: {
