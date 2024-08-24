@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, Button, View} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import {copyToClipboard} from '../../utils/call';
 import captureScreen from '../../components/ScreenCapture';
 import {
@@ -24,7 +24,7 @@ import {
 
 import CallActionBox from '../../components/CallActionBox';
 import io from 'socket.io-client';
-
+import CustomButton2 from '../../components/CustomButton2';
 const configuration = {
   iceServers: [
     {
@@ -33,7 +33,7 @@ const configuration = {
   ],
   iceCandidatePoolSize: 10,
 };
-
+import EnglishToHebrew from '../../utils/constants/EnglishToHebrew';
 const URL = `${process.env.BASE_URL}:${process.env.FLASK_PORT}`;
 const socket = io(URL);
 
@@ -45,18 +45,8 @@ const CallerPage = ({roomId, screens, setScreen}) => {
   const [isOffCam, setIsOffCam] = useState(false);
   const [signText, setSignText] = useState('');
   const [voiceText, setVoiceText] = useState('');
-  let dict = new Map();
-  dict.set('B', 'ב');
-  dict.set('I', 'ו');
-  dict.set('C', 'כ');
-  dict.set('L', 'ל');
-  dict.set('M', 'ם');
-  dict.set('N', 'נ');
-  dict.set('S', 'ס');
-  dict.set('R', 'ר');
-  dict.set('W', 'ש');
-  dict.set('T', 'ת');
-  dict.set('D', 'ו');
+  const [runPeriodically, setRunPeridically] = useState(false);
+
   useEffect(() => {
     startLocalStream();
   }, []);
@@ -69,13 +59,14 @@ const CallerPage = ({roomId, screens, setScreen}) => {
 
   const MILISECONDS = 5000;
   useEffect(() => {
-    const interval = setInterval(() => {
-      // emit Image to socket
-      // console.log('calling drawImage()');
-      drawImage();
-    }, MILISECONDS);
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, []);
+    console.log(`runPeriodically is set to ${runPeriodically}`);
+    if (runPeriodically) {
+      const interval = setInterval(() => {
+        drawImage(); // emit Image to socket
+      }, MILISECONDS);
+      return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    }
+  }, [runPeriodically]);
 
   useEffect(() => {
     if (signText.length >= 20) {
@@ -101,10 +92,10 @@ const CallerPage = ({roomId, screens, setScreen}) => {
         setSignText(signText => signText.slice(0, -1));
       } else if (data.prediction == 'space') {
         setSignText(signText => signText + ' ');
-      } else if (dict.get(data.prediction) == undefined) {
+      } else if (EnglishToHebrew[data.prediction] == undefined) {
         // setSignText(signText => signText + 'א');
       } else {
-        setSignText(signText => signText + dict.get(data.prediction));
+        setSignText(signText => signText + EnglishToHebrew[data.prediction]);
       }
     });
 
@@ -279,7 +270,17 @@ const CallerPage = ({roomId, screens, setScreen}) => {
       </View>
       <View style={styles.textContainer}>
         <View style={styles.buttonView}>
-          <Button title="Reset" onPress={clearSL} />
+          <CustomButton2
+            functionToPress={clearSL}
+            textToDisplay={'Reset'}></CustomButton2>
+          <CustomButton2
+            functionToPress={drawImage}
+            textToDisplay={'Capture'}></CustomButton2>
+          <CustomButton2
+            functionToPress={() => {
+              setRunPeridically(!runPeriodically);
+            }}
+            textToDisplay={'Run continously'}></CustomButton2>
         </View>
         <View style={styles.textView}>
           <Text className="text-lg font-bold text-center text-black">
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
     height: '95%',
     aspectRatio: 1,
     borderWidth: 4,
-    borderColor: 'white',
+    // borderColor: 'white',
     borderRadius: 5,
   },
   textContainer: {
@@ -341,8 +342,9 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   callActionsContainer: {
     justifyContent: 'flex-end',
