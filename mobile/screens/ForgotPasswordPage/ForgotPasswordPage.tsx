@@ -32,6 +32,7 @@ const ForgotPasswordPage = () => {
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
     } catch (error) {
+      console.error(`ForgotPasswordPage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

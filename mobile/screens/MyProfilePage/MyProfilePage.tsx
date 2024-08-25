@@ -44,6 +44,7 @@ const MyProfilePage = ({route}: Props) => {
           setProfileImage(null); // Use null if no image
         }
       } catch (error) {
+        console.error(`MyProfilePage ${URL}/user/getUser`)
         if (axios.isAxiosError(error)) {
           setMessage(error.response?.data?.error || 'An error occurred');
           console.log(message);
