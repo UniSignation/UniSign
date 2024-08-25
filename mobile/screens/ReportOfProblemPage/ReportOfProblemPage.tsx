@@ -38,6 +38,8 @@ const ReportOfProblemPage = ({ route }: Props) => {
             const firstName = User.data.firstName;
             navigation.navigate("Home", { firstName, email });
         } catch (error) {
+            
+            console.error(`ReportOfProblemPage ${URL}/user/getUser`)
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');
             } else {
@@ -53,6 +55,7 @@ const ReportOfProblemPage = ({ route }: Props) => {
             const firstName = response.data.firstName;
             navigation.navigate("Home", { firstName, email });
         } catch (error) {
+            console.error(`ReportOfProblemPage ${URL}/user/getUser`)
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');
             } else {

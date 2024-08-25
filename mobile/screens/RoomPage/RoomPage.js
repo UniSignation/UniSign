@@ -29,6 +29,7 @@ const RoomPage = ({
       const firstName = response.data.firstName;
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
+      console.error(`RoomPage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

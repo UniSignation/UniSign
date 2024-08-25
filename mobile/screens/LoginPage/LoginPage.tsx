@@ -36,10 +36,11 @@ const LoginScreen = () => {
       const user = await axios.post(`${URL}/user/getUser`, {email});
       const firstName = user.data.firstName;
       if (user.data.isAdmin)
-          navigation.navigate('HomeAdmin', {firstName, email});
+        navigation.navigate('HomeAdmin', {firstName, email});
       else navigation.navigate('Home', {firstName, email});
       reset();
     } catch (error) {
+      console.error(`LoginPage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

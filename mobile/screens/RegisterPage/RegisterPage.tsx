@@ -84,6 +84,7 @@ const RegisterPage = () => {
       setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
+      console.error(`RegisterPage ${URL}/user/getUser`)
       console.error('ERROR', error);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');

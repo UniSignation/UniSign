@@ -55,6 +55,7 @@ const EditProfilePage = ({route}: Props) => {
           setProfileImage(null); // Use null if no image
         }
       } catch (error) {
+        console.error(`EditProfilePage ${URL}/user/getUser`)
         if (axios.isAxiosError(error)) {
           setMessage(error.response?.data?.error || 'An error occurred');
         } else {
@@ -77,6 +78,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
+      console.error(`EditProfilePage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -96,6 +98,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
     } catch (error) {
+      console.error(`EditProfilePage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -110,6 +113,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Login');
     } catch (error) {
+      console.error(`EditProfilePage ${URL}/user/getUser`)
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

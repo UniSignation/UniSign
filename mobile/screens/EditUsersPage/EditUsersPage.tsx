@@ -58,6 +58,7 @@ const EditUsersPage = ({ route }: Props) => {
             const users = Users.data;
             navigation.navigate('Edit Users', { users, firstName, email });
         } catch (error) {
+            console.error(`EditUsersPage ${URL}/user/getUser`)
             if (axios.isAxiosError(error)) {
                 setMessage(error.response?.data?.error || 'An error occurred');
             } else {
