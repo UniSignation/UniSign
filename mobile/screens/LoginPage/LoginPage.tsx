@@ -35,7 +35,7 @@ const LoginScreen = () => {
       setMessage(response.data.message);
       const user = await axios.post(`${URL}/user/getUser`, {email});
       const firstName = user.data.firstName;
-      if (email === 'UnisignAY@gmail.com')
+      if (user.data.isAdmin)
           navigation.navigate('HomeAdmin', {firstName, email});
       else navigation.navigate('Home', {firstName, email});
       reset();

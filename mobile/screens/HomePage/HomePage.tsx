@@ -1,11 +1,12 @@
 import {View, StyleSheet, Text} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {ClickableText, ClickableImage, Button} from '../../components/Button';
 import {Title} from '../../components/Text';
 import {useNavigation, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../components/navigation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
+import {Buffer} from 'buffer';
 
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
@@ -21,9 +22,28 @@ type Props = {
 
 const HomePage = ({route}: Props) => {
   const navigation = useNavigation<HomePageNavigationProp>();
-
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const {firstName, email} = route.params;
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.post(`${URL}/user/getUser`, {email});
+        const user = response.data;
+        if (user.profileImage && user.profileImage.data) {
+          const base64String = Buffer.from(user.profileImage.data).toString(
+            'base64',
+          );
+          setProfileImage(`data:image/jpeg;base64,${base64String}`);
+        } else {
+          setProfileImage(null); // Use null if no image
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchUser();
+  }, [email]);
   const onImagePressed = () => {
     navigation.navigate('My profile', {email});
   };
@@ -53,7 +73,11 @@ const HomePage = ({route}: Props) => {
         <View style={styles.addPictureView}>
           <ClickableImage
             onPress={onImagePressed}
-            url={require('../../assets/images/profile.png')}
+            url={
+              profileImage
+                ? {uri: profileImage}
+                : require('../../assets/images/profile.png')
+            }
             type="Circle"
           />
           <Text style={styles.textPhoto}>My profile</Text>

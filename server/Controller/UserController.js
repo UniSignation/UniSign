@@ -1,9 +1,10 @@
-const Users = require('../models/users');
-const emailVerificationCodes = require('../models/emailVerificationCodes')
-const bcrypt = require('bcrypt');
-const sgMail = require('@sendgrid/mail');
-const crypto = require('crypto');
-
+const Users = require("../models/users");
+const emailVerificationCodes = require("../models/emailVerificationCodes");
+const bcrypt = require("bcrypt");
+const sgMail = require("@sendgrid/mail");
+const crypto = require("crypto");
+const path = require("path");
+const fs = require("fs");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -14,34 +15,28 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// exports.signUp = async (req, res) => {
-//   try {
-//     const newRecord = await Users.create({
-//       firstName: req.body.firstName,
-//       lastName: req.body.lastName,
-//       email: req.body.email,
-//       usesService: req.body.usesService,
-//       password: req.body.password,
-//       profileImage: req.file ? req.file.path : null, // שמירת נתיב התמונה
-//     });
-//     res.status(201).json(newRecord);
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
 exports.signUp = async (req, res) => {
   try {
-    if (!req.file) {
-      throw new Error("File not uploaded");
+    let profileImage = req.file?.buffer || null;
+
+    if (!profileImage) {
+      // If no image is provided, use a default image
+      const defaultImagePath = path.join(
+        __dirname,
+        "../",
+        "assets",
+        "profile.jpg"
+      );
+      profileImage = fs.readFileSync(defaultImagePath);
     }
-    
+
     const newRecord = await Users.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
       usesService: req.body.usesService,
       password: req.body.password,
-      profileImage: req.file.path // שמירת הנתיב של התמונה
+      profileImage: profileImage, // שמירת הנתיב של התמונה
     });
     res.status(201).json(newRecord);
   } catch (error) {
@@ -50,21 +45,20 @@ exports.signUp = async (req, res) => {
   }
 };
 
-
 exports.login = async (req, res) => {
   try {
     const user = await Users.findOne({ where: { email: req.body.email } });
     if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
+      return res.status(401).json({ error: "Invalid password" });
     }
 
     // Password is correct, proceed with login
-    res.json({ message: 'Login successful' });
+    res.json({ message: "Login successful" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -74,7 +68,7 @@ exports.getUser = async (req, res) => {
   try {
     const user = await Users.findOne({ where: { email: req.body.email } });
     if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: "User not found" });
     }
     res.status(201).json(user);
   } catch (error) {
@@ -82,10 +76,9 @@ exports.getUser = async (req, res) => {
   }
 };
 
-
 exports.sendEmail = async (req, res) => {
   try {
-    const temporaryCode = crypto.randomBytes(3).toString('hex');
+    const temporaryCode = crypto.randomBytes(3).toString("hex");
     const expiry = new Date(Date.now() + 5 * 60 * 1000);
     const email = req.body.email;
 
@@ -97,10 +90,10 @@ exports.sendEmail = async (req, res) => {
 
     const msg = {
       to: email, // list of receivers
-      from: 'unisignay@gmail.com', // sender address (verified sender)
+      from: "unisignay@gmail.com", // sender address (verified sender)
       dynamic_template_data: {
-        temporaryCode: temporaryCode
-      }
+        temporaryCode: temporaryCode,
+      },
     };
     await sgMail.send(msg);
 
@@ -113,16 +106,18 @@ exports.sendEmail = async (req, res) => {
 
 exports.codeMatch = async (req, res) => {
   try {
-    const userCode = await emailVerificationCodes.findOne({ where: { email: req.body.email } });
+    const userCode = await emailVerificationCodes.findOne({
+      where: { email: req.body.email },
+    });
     if (!userCode) {
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: "User not found" });
     }
 
     if (req.body.code !== userCode.temporaryCode) {
-      return res.status(401).json({ error: 'Code is not match' });
+      return res.status(401).json({ error: "Code is not match" });
     }
 
-    res.json({ message: 'Code is match' });
+    res.json({ message: "Code is match" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -132,7 +127,7 @@ exports.updatePassword = async (req, res) => {
   try {
     const updateRecord = await Users.update(
       {
-        password: req.body.password
+        password: req.body.password,
       },
       {
         where: { email: req.body.email },
@@ -140,7 +135,7 @@ exports.updatePassword = async (req, res) => {
       }
     );
     if (updateRecord) {
-      return res.status(200).json({ message: 'Password updated successfully' });
+      return res.status(200).json({ message: "Password updated successfully" });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -150,11 +145,10 @@ exports.updatePassword = async (req, res) => {
 exports.deleteCode = async (req, res) => {
   try {
     const updateRecord = await emailVerificationCodes.destroy({
-        where: { email: req.body.email },
-      }
-    );
+      where: { email: req.body.email },
+    });
     if (updateRecord) {
-      return res.status(200).json({ message: 'delete successfully' });
+      return res.status(200).json({ message: "delete successfully" });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -173,7 +167,9 @@ exports.updateUser = async (req, res) => {
       }
     );
     if (updateRecord) {
-      return res.status(200).json({ message: 'User details updated successfully' });
+      return res
+        .status(200)
+        .json({ message: "User details updated successfully" });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -183,11 +179,10 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const updateRecord = await Users.destroy({
-        where: { email: req.body.email },
-      }
-    );
+      where: { email: req.body.email },
+    });
     if (updateRecord) {
-      return res.status(200).json({ message: 'delete successfully' });
+      return res.status(200).json({ message: "delete successfully" });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -197,9 +192,9 @@ exports.deleteUser = async (req, res) => {
 exports.sendReport = async (req, res) => {
   try {
     const msg = {
-      to: 'unisignay@gmail.com',
-      from:  'unisignay@gmail.com', 
-      subject: 'Report problem',
+      to: "unisignay@gmail.com",
+      from: "unisignay@gmail.com",
+      subject: "Report problem",
     };
     await sgMail.send(msg);
 
