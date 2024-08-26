@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CustomInput from '../../components/CustomInput';
-import {Button, ClickableText} from '../../components/Button';
+import {Button, ClickableText, ExternalLoginButton} from '../../components/Button';
 import {Title, Message} from '../../components/Text';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -49,10 +49,21 @@ const LoginScreen = () => {
     }
   };
 
+  const onLoginGooglePressed = () => {
+    navigation.navigate('Register');
+    reset();
+  };
+
+  const onLoginFacebookPressed = () => {
+    navigation.navigate('Register');
+    reset();
+  };
+
   const onRegisterPressed = () => {
     navigation.navigate('Register');
     reset();
   };
+
   const onClickForgotPressed = () => {
     navigation.navigate('Forgot password');
     reset();
@@ -78,6 +89,9 @@ const LoginScreen = () => {
         />
         {message ? <Message text={message} /> : null}
         <Button onPress={handleSubmit(onLoginPressed)} text="LOGIN" />
+        <ExternalLoginButton onPress={onLoginGooglePressed} text="Login with Google" type="Google" />
+        <ExternalLoginButton onPress={onLoginFacebookPressed} text="Login with Facebook" type="Facebook" />
+
         <ClickableText
           onPress={onRegisterPressed}
           text="Register"
