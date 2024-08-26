@@ -40,7 +40,7 @@ const LoginScreen = () => {
       else navigation.navigate('Home', {firstName, email});
       reset();
     } catch (error) {
-      console.error(`LoginPage ${URL}/user/getUser`)
+      console.error(`${error} LoginPage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

@@ -68,7 +68,7 @@ const ResetPasswordPage = ({route}: Props) => {
       navigation.navigate('Login');
       await axios.post(`${URL}/user/deleteCode`, {email});
     } catch (error) {
-      console.error(`ResetPasswordPage ${URL}/user/getUser`)
+      console.error(`${error} ResetPasswordPage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -83,7 +83,7 @@ const ResetPasswordPage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Login');
     } catch (error) {
-      console.error(`ResetPasswordPage ${URL}/user/getUser`)
+      console.error(`${error} ResetPasswordPage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -99,7 +99,7 @@ const ResetPasswordPage = ({route}: Props) => {
       navigation.navigate('Reset password', {email});
       reset();
     } catch (error) {
-      console.error(`ResetPasswordPage ${URL}/user/getUser`)
+      console.error(`${error} ResetPasswordPage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

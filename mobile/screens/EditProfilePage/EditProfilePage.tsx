@@ -13,6 +13,8 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
+import {Buffer} from 'buffer';
+
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 type EditProfileRouteProp = RouteProp<RootStackParamList, 'Edit profile'>;
@@ -55,7 +57,7 @@ const EditProfilePage = ({route}: Props) => {
           setProfileImage(null); // Use null if no image
         }
       } catch (error) {
-        console.error(`EditProfilePage ${URL}/user/getUser`)
+        console.error(`${error} EditProfilePage ${URL}/user/getUser`);
         if (axios.isAxiosError(error)) {
           setMessage(error.response?.data?.error || 'An error occurred');
         } else {
@@ -78,7 +80,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -98,7 +100,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -113,7 +115,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Login');
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
