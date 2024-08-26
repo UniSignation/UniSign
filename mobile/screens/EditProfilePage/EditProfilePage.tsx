@@ -46,13 +46,6 @@ const EditProfilePage = ({route}: Props) => {
     const fetchUser = async () => {
       try {
         const response = await axios.post(`${URL}/user/getUser`, {email});
-        const user = response.data;
-        if (user.profileImage && user.profileImage.data) {
-          const base64String = Buffer.from(user.profileImage.data).toString(
-            'base64',
-          );
-          setProfileImage(`data:image/jpeg;base64,${base64String}`);
-        const response = await axios.post(`${URL}/user/getUser`, {email});
         setUser(response.data);
         const user = response.data;
         if (user.profileImage && user.profileImage.data) {
