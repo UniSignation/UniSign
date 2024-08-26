@@ -13,7 +13,7 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
-// import {Buffer} from 'buffer';
+import {Buffer} from 'buffer';
 
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
@@ -45,13 +45,13 @@ const EditProfilePage = ({route}: Props) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        /**const response = await axios.post(`${URL}/user/getUser`, {email});
+        const response = await axios.post(`${URL}/user/getUser`, {email});
         const user = response.data;
         if (user.profileImage && user.profileImage.data) {
           const base64String = Buffer.from(user.profileImage.data).toString(
             'base64',
           );
-          setProfileImage(`data:image/jpeg;base64,${base64String}`); */
+          setProfileImage(`data:image/jpeg;base64,${base64String}`);
         const response = await axios.post(`${URL}/user/getUser`, {email});
         setUser(response.data);
         const user = response.data;
