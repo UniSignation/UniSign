@@ -64,6 +64,7 @@ yarn-error.log
 .metro-health-check*
 
 server/.env
+server/temp.txt
 
 src/UniSign/.pnp.*
 src/UniSign/.yarn/*

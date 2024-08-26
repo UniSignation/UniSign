@@ -41,10 +41,15 @@ const ReportOfProblemPage = ({route}: Props) => {
 
   const onSendPressed = async () => {
     try {
-      const response = await axios.post(`${URL}/user/sendReport`, {email});
-      setMessage(response.data.message);
-      const User = await axios.post(`${URL}/user/getUser`, {email});
+      const User = await axios.post(`${URL}/user/getUserWithoutPicture`, {email});
+      console.log(`${URL}/user/getUserWithoutPicture`)
+      console.log(User.data.message)
       const firstName = User.data.firstName;
+    setMessage(User.data.message);
+
+      const response = await axios.post(`${URL}/user/sendReport`, {email, firstName});
+
+      setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
       console.error(`${error} ReportOfProblemPage ${URL}/user/getUser`);
@@ -55,6 +60,7 @@ const ReportOfProblemPage = ({route}: Props) => {
       }
     }
   };
+
   const onBackPressed = async () => {
     try {
       const response = await axios.post(`${URL}/user/getUser`, {email});

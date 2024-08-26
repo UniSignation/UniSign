@@ -26,6 +26,7 @@ const LoginScreen = () => {
   });
 
   const onLoginPressed = async (data: LoginInfo) => {
+    console.log(`${URL}/user/login`);
     const {email, password} = data;
     try {
       const response = await axios.post(`${URL}/user/login`, {
