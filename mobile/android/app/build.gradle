@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
 
 import com.android.build.OutputFile
 
@@ -112,10 +113,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('new-debug-keys.keystore')
+            storePassword 'unisign'
+            keyAlias 'new-debug-keys'
+            keyPassword 'unisign'
         }
     }
     buildTypes {
