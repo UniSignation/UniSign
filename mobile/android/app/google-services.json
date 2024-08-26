@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "32882604580",
+    "project_id": "unisign-firebase-app",
+    "storage_bucket": "unisign-firebase-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32882604580:android:ece285cc12626af95076b1",
+        "android_client_info": {
+          "package_name": "com.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32882604580-b5qvq398pm14pkj4597hd6icu5bs3snf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobile",
+            "certificate_hash": "55acf8be8a4c1acfef3e611ca6e6bb2840ef6c27"
+          }
+        },
+        {
+          "client_id": "32882604580-a2b4n25gnipeqjdbh6lceid3vb6jenf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5miEzyzvVvJgX7lcoYImmsQHElE3RmD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32882604580-a2b4n25gnipeqjdbh6lceid3vb6jenf7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
