@@ -9,6 +9,7 @@ const upload = multer({ storage: storage });
 
 router.get("/getAllUser", userController.getAllUsers);
 router.post("/getUser", userController.getUser);
+router.post("/getUserWithoutPicture", userController.getUserWithoutPicture);
 router.post("/sign-up", upload.single("profileImage"), userController.signUp);
 router.post("/login", userController.login);
 router.post("/sendEmail", userController.sendEmail);

@@ -78,6 +78,19 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getUserWithoutPicture = async (req, res) => {
+  console.log("get")
+  try {
+    const user = await Users.findOne({attributes: ["firstName", "lastName", "email"]},{ where: { email: req.body.email } });
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.sendEmail = async (req, res) => {
   try {
     const temporaryCode = crypto.randomBytes(3).toString("hex");
@@ -192,11 +205,13 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.sendReport = async (req, res) => {
+
   try {
     const msg = {
       to: "unisignay@gmail.com",
       from: "unisignay@gmail.com",
       subject: "Report problem",
+      
     };
     await sgMail.send(msg);
 
