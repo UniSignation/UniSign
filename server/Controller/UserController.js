@@ -5,6 +5,7 @@ const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
+require('dotenv').config();
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -81,7 +82,10 @@ exports.getUser = async (req, res) => {
 exports.getUserWithoutPicture = async (req, res) => {
   console.log("get")
   try {
-    const user = await Users.findOne({attributes: ["firstName", "lastName", "email"]},{ where: { email: req.body.email } });
+    const user = await Users.findOne({
+      attributes: ["firstName", "lastName", "email"],
+      where: { email: req.body.email }
+    });
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
@@ -92,6 +96,7 @@ exports.getUserWithoutPicture = async (req, res) => {
 };
 
 exports.sendEmail = async (req, res) => {
+  sgMail.setApiKey(process.env.SEND_MAIL_SENDGRIP_API_KEY);
   try {
     const temporaryCode = crypto.randomBytes(3).toString("hex");
     const expiry = new Date(Date.now() + 5 * 60 * 1000);
@@ -106,6 +111,7 @@ exports.sendEmail = async (req, res) => {
     const msg = {
       to: email, // list of receivers
       from: "unisignay@gmail.com", // sender address (verified sender)
+      templateId: 'd-6f2b8b3d8f344693bd50d6949b126b0b',
       dynamic_template_data: {
         temporaryCode: temporaryCode,
       },
@@ -205,15 +211,29 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.sendReport = async (req, res) => {
-
+  sgMail.setApiKey(process.env.SEND_REPORT_SENDGRIP_API_KEY);
   try {
-    const msg = {
+    const msg1 = {
+      to: req.body.email,
+      from: "unisignay@gmail.com",
+      templateId: "d-dfa91fa2290f44ab8c2137c805ac956c",
+      dynamic_template_data: {
+        name: req.body.firstName,
+      },
+    };
+
+    const msg2 = {
       to: "unisignay@gmail.com",
       from: "unisignay@gmail.com",
-      subject: "Report problem",
-      
+      templateId: "d-d64f377cd9f4439e9dd74a3e052d7733",
+      dynamic_template_data: {
+        email: req.body.email,
+        subject: req.body.subject,
+        description: req.body.description
+      },
     };
-    await sgMail.send(msg);
+    await sgMail.send(msg1);
+    await sgMail.send(msg2);
 
     return res.status(201).json({ mes: "You should receive an email" });
   } catch (error) {
