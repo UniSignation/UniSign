@@ -38,7 +38,7 @@ const HomePage = ({route}: Props) => {
           setProfileImage(null); // Use null if no image
         }
       } catch (error) {
-        console.error(`HomePage ${URL}/user/getUser`)
+        console.error(`${error} HomePage ${URL}/user/getUser`);
         console.error(error);
       }
     };

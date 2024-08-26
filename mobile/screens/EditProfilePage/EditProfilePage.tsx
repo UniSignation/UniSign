@@ -13,6 +13,8 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../components/navigation';
 import axios from 'axios';
+// import {Buffer} from 'buffer';
+
 const URL = `${process.env.BASE_URL}:${process.env.EXPRESS_PORT}`;
 
 type EditProfileRouteProp = RouteProp<RootStackParamList, 'Edit profile'>;
@@ -43,6 +45,13 @@ const EditProfilePage = ({route}: Props) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        /**const response = await axios.post(`${URL}/user/getUser`, {email});
+        const user = response.data;
+        if (user.profileImage && user.profileImage.data) {
+          const base64String = Buffer.from(user.profileImage.data).toString(
+            'base64',
+          );
+          setProfileImage(`data:image/jpeg;base64,${base64String}`); */
         const response = await axios.post(`${URL}/user/getUser`, {email});
         setUser(response.data);
         const user = response.data;
@@ -55,7 +64,7 @@ const EditProfilePage = ({route}: Props) => {
           setProfileImage(null); // Use null if no image
         }
       } catch (error) {
-        console.error(`EditProfilePage ${URL}/user/getUser`)
+        console.error(`${error} EditProfilePage ${URL}/user/getUser`);
         if (axios.isAxiosError(error)) {
           setMessage(error.response?.data?.error || 'An error occurred');
         } else {
@@ -78,7 +87,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -98,7 +107,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Reset password', {email});
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {
@@ -113,7 +122,7 @@ const EditProfilePage = ({route}: Props) => {
       setMessage(response.data.message);
       navigation.navigate('Login');
     } catch (error) {
-      console.error(`EditProfilePage ${URL}/user/getUser`)
+      console.error(`${error} EditProfilePage ${URL}/user/getUser`);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
       } else {

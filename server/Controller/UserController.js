@@ -8,7 +8,9 @@ const fs = require("fs");
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const records = await Users.findAll();
+    const records = await Users.findAll({
+      attributes: ["firstName", "lastName", "email"],
+    });
     res.json(records);
   } catch (error) {
     res.status(400).json({ error: error.message });

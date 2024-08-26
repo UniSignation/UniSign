@@ -58,8 +58,8 @@ const RegisterPage = () => {
   };
 
   const onRegisterPressed = async (data: RegisterInfo) => {
-    console.log('onRegisterPressed')
-    console.log(`${URL}/user/sign-up`)
+    console.log('onRegisterPressed');
+    console.log(`${URL}/user/sign-up`);
     const {firstName, lastName, email, password} = data;
     const formData = new FormData();
 
@@ -84,7 +84,7 @@ const RegisterPage = () => {
       setMessage(response.data.message);
       navigation.navigate('Home', {firstName, email});
     } catch (error) {
-      console.error(`RegisterPage ${URL}/user/getUser`)
+      console.error(`${error} RegisterPage ${URL}/user/getUser`);
       console.error('ERROR', error);
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.error || 'An error occurred');
